@@ -20,7 +20,7 @@ import java.util.logging.Level;
 
 public class Simulation {
 
-  private static int MAX_RUNS = 1000;
+  private static int MAX_RUNS = 10000;
   private String attackingArmyPattern;
   private String defendingArmyPattern;
   private int numberOfRounds;
@@ -40,29 +40,27 @@ public class Simulation {
   }
 
   public SimulationResult simulate() throws InvalidArmyException {
-    for (int rounds = 0; rounds < numberOfRounds; rounds++) {
-      List<BattleSimulatorRunner> listOfBattleRunners = new LinkedList<BattleSimulatorRunner>();
+    for (int rounds = 0; rounds < (numberOfRounds / 100); rounds++) {
+      List<BattleRunner> listOfBattleRunners = new LinkedList<BattleRunner>();
 
       for (int i = 0; i < 100; i++) {
         Army attackingArmy = UnitPatternHelper.createArmyFromPattern(attackingArmyPattern);
         Army defendingArmy = UnitPatternHelper.createArmyFromPattern(defendingArmyPattern);
 
-        listOfBattleRunners.add(new BattleSimulatorRunner(attackingArmy, defendingArmy));
+        listOfBattleRunners.add(new BattleRunner(attackingArmy, defendingArmy));
       }
 
       try {
         List<Future<BattleResult>> results = threadPool.invokeAll(listOfBattleRunners);
         for (Future<BattleResult> battleResult : results) {
-          try {
-            simResult.addBattleResult(battleResult.get());
-          } catch (ExecutionException ex) {
-            java.util.logging.Logger.getLogger(Simulation.class.getName()).log(Level.SEVERE, null, ex);
-          }
+          simResult.addBattleResult(battleResult.get());
         }
-      } catch (InterruptedException ex) {
-        // ignore
+      } catch (Exception ex) {
+        LOG.error("Exception in simulation: ", ex);
       }
     }
+
+    threadPool.shutdown();
 
     return simResult;
   }
@@ -79,15 +77,19 @@ public class Simulation {
     LOG.info("Min Computer losses: %s", UnitPatternHelper.createPatternFromMap(simResult.getMinComputerLosses()));
     LOG.info("Max Computer losses: %s", UnitPatternHelper.createPatternFromMap(simResult.getMaxComputerLosses()));
     LOG.info("Time: %s s", (System.currentTimeMillis() - start) / 1000);
-    System.exit(0);
+    LogManager.shutdown();
+
+
+
+
   }
 
-  private static class BattleSimulatorRunner implements Callable<BattleResult> {
+  private static class BattleRunner implements Callable<BattleResult> {
 
     private Army attackingArmy;
     private Army defendingArmy;
 
-    public BattleSimulatorRunner(Army attackingArmy, Army defendingArmy) {
+    public BattleRunner(Army attackingArmy, Army defendingArmy) {
       this.attackingArmy = attackingArmy;
       this.defendingArmy = defendingArmy;
     }
