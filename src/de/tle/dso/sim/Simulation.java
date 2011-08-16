@@ -43,17 +43,17 @@ public class Simulation {
   }
 
   public static void main(String[] args) throws InvalidArmyException {
-    System.out.println("Starting Simulation ....");
+    LOG.info("Starting Simulation ....");
     long start = System.currentTimeMillis();
     Simulation sim = new Simulation("200 S, 1G", "160 RB, 10 WL, 30 WH", MAX_RUNS);
     SimulationResult simResult = sim.simulate();
 
     LOG.info("Done %s Runs", simResult.getNumberOfSimulationRuns());
-    LOG.info("Min Player losses: %s", new Object[] {UnitPatternHelper.createPatternFromMap(simResult.getMinPlayerLosses())});
-    LOG.info("Max Player losses: %s", new Object[] {UnitPatternHelper.createPatternFromMap(simResult.getMaxPlayerLosses())});
-    LOG.info("Min Computer losses: %s", new Object[] {UnitPatternHelper.createPatternFromMap(simResult.getMinComputerLosses())});
-    LOG.info("Max Computer losses: %s", new Object[] {UnitPatternHelper.createPatternFromMap(simResult.getMaxComputerLosses())});
-    LOG.info("Time: %s s", new Object[] {(System.currentTimeMillis() - start) / 1000});
+    LOG.info("Min Player losses: %s", UnitPatternHelper.createPatternFromMap(simResult.getMinPlayerLosses()));
+    LOG.info("Max Player losses: %s", UnitPatternHelper.createPatternFromMap(simResult.getMaxPlayerLosses()));
+    LOG.info("Min Computer losses: %s", UnitPatternHelper.createPatternFromMap(simResult.getMinComputerLosses()));
+    LOG.info("Max Computer losses: %s", UnitPatternHelper.createPatternFromMap(simResult.getMaxComputerLosses()));
+    LOG.info("Time: %s s", (System.currentTimeMillis() - start) / 1000);
     LogManager.shutdown();
   }
 }

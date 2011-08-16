@@ -1,12 +1,11 @@
 package de.tle.dso.units;
 
 import de.tle.dso.units.player.General;
-import de.tle.dso.units.sort.HeapSort;
 import de.tle.dso.units.sort.SortByMaxHitPointsAscThenPrioComparator;
 import de.tle.dso.units.sort.SortByPrioComparator;
 import de.tle.dso.units.util.UnitPatternHelper;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -86,9 +85,8 @@ public class Army {
   }
 
   private List<Unit> sort(Comparator<Unit> comparator) {
-    Unit[] tmpArray = units.toArray(new Unit[0]);
-    HeapSort.heapsort(tmpArray, comparator);
-    List<Unit> sortedList = Arrays.asList(tmpArray);
+    List<Unit> sortedList = new ArrayList<Unit>(units);
+    Collections.sort(sortedList, comparator);
     return sortedList;
   }
 }
