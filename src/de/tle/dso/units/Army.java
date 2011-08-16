@@ -1,16 +1,17 @@
 package de.tle.dso.units;
 
 import de.tle.dso.units.player.General;
+import de.tle.dso.units.sort.HeapSort;
 import de.tle.dso.units.sort.SortByMaxHitPointsAscThenPrioComparator;
 import de.tle.dso.units.sort.SortByPrioComparator;
 import de.tle.dso.units.util.UnitPatternHelper;
-import java.util.Collections;
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Army {
 
-  private LinkedList<Unit> units = new LinkedList<Unit>();
+  private List<Unit> units = new ArrayList<Unit>(201);
 
   public void addGeneral() {
     units.add(new General());
@@ -38,25 +39,28 @@ public class Army {
     return units.size();
   }
 
-  public LinkedList<Unit> getUnits() {
+  public List<Unit> getUnits() {
     return units;
   }
 
   public List<Unit> getUnitsByPrio() {
-    List<Unit> sortedList = new LinkedList<Unit>(units);
-    Collections.sort(sortedList, new SortByPrioComparator());
+    // Collections.sort(sortedList, new SortByPrioComparator());
+    Unit[] tmpArray = units.toArray(new Unit[] {});
+    HeapSort.heapsort(tmpArray, new SortByPrioComparator());
+    List<Unit> sortedList = Arrays.asList(tmpArray);
     return sortedList;
   }
 
   public List<Unit> getUnitsByHitpoints() {
-    List<Unit> sortedList = new LinkedList<Unit>(units);
-    Collections.sort(sortedList, new SortByMaxHitPointsAscThenPrioComparator());
+    Unit[] tmpArray = units.toArray(new Unit[] {});
+    HeapSort.heapsort(tmpArray, new SortByMaxHitPointsAscThenPrioComparator());
+    List<Unit> sortedList = Arrays.asList(tmpArray);
     return sortedList;
   }
 
   public List<Unit> removeDeadUnits() {
-    LinkedList<Unit> deadUnits = new LinkedList<Unit>();
-    LinkedList<Unit> aliveUnits = new LinkedList<Unit>();
+    List<Unit> deadUnits = new ArrayList<Unit>(201);
+    List<Unit> aliveUnits = new ArrayList<Unit>(201);
 
     for (Unit unit : units) {
       if (unit.isDead()) {

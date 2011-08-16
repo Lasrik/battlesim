@@ -1,5 +1,6 @@
 package de.tle.dso.sim.battle;
 
+import com.spinn3r.log5j.Logger;
 import de.tle.dso.units.Army;
 import de.tle.dso.units.Initiative;
 import de.tle.dso.units.Unit;
@@ -11,6 +12,8 @@ public class Battle {
   protected Army attackingArmy;
   protected Army defendingArmy;
   protected BattleResult battleResult;
+
+  private final static Logger LOG = Logger.getLogger(false);
 
   public Battle(Army attacker, Army defender) {
     this.attackingArmy = attacker;
@@ -28,14 +31,14 @@ public class Battle {
   }
 
   private void startBattle() {
-//    System.out.println("Kampf beginnt.");
+    LOG.info("Kampf beginnt.");
 
     int roundNumber = 0;
     while (!endBattle()) {
-//      System.out.printf("\nRunde %s\n", ++roundNumber);
+      LOG.debug("Runde %s", ++roundNumber);
 
       for (Initiative phase : Initiative.values()) {
-//        System.out.printf("Phase %s\n", new Object[]{phase});
+        LOG.debug("Phase %s", new Object[]{phase});
 
         attackersWave(phase);
         defendersFightBack(phase);
@@ -44,7 +47,7 @@ public class Battle {
       }
     }
 
-//    System.out.println("Kampf ende.\n");
+    LOG.info("Kampf ende.");
   }
 
   private void defendersFightBack(Initiative phase) {
@@ -98,14 +101,14 @@ public class Battle {
   }
 
   private void logArmies() {
-//    System.out.printf("Angreifer: %s ---- Verteidiger: %s\n", new Object[]{attackingArmy.toString(), defendingArmy.toString()});
+    LOG.info("Angreifer: %s ---- Verteidiger: %s", new Object[]{attackingArmy.toString(), defendingArmy.toString()});
   }
 
   private void logBattleOutcome() {
-//    System.out.printf("Verluste Spieler: %s\n", UnitPatternHelper.createPatternFromMap(battleResult.playerLosses));
-//    System.out.printf("Verluste Computer: %s\n", UnitPatternHelper.createPatternFromMap(battleResult.computerLosses));
-//    System.out.println(battleResult.battleWon ? "GEWONNEN" : "VERLOREN");
-//    System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++");
-//    System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++");
+    LOG.info("Verluste Spieler: %s", UnitPatternHelper.createPatternFromMap(battleResult.playerLosses));
+    LOG.debug("Verluste Computer: %s", UnitPatternHelper.createPatternFromMap(battleResult.computerLosses));
+    LOG.debug(battleResult.battleWon ? "GEWONNEN" : "VERLOREN");
+    LOG.debug("+++++++++++++++++++++++++++++++++++++++++++++++++");
+    LOG.debug("+++++++++++++++++++++++++++++++++++++++++++++++++");
   }
 }

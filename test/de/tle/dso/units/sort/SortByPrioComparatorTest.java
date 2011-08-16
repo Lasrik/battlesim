@@ -1,6 +1,5 @@
 package de.tle.dso.units.sort;
 
-import de.tle.dso.units.sort.SortByPrioComparator;
 import de.tle.dso.units.Army;
 import de.tle.dso.units.Unit;
 import de.tle.dso.units.computer.Plünderer;

@@ -1,5 +1,7 @@
 package de.tle.dso.sim;
 
+import com.spinn3r.log5j.LogManager;
+import com.spinn3r.log5j.Logger;
 import de.tle.dso.sim.battle.Battle;
 import de.tle.dso.sim.battle.BattleResult;
 import de.tle.dso.sim.battle.InvalidArmyException;
@@ -7,7 +9,7 @@ import de.tle.dso.units.Army;
 import de.tle.dso.units.util.UnitPatternHelper;
 
 public class Simulation {
-  private static int MAX_RUNS = 100000;
+  private static int MAX_RUNS = 10000;
 
   private String attackingArmyPattern;
   private String defendingArmyPattern;
@@ -15,6 +17,7 @@ public class Simulation {
   private SimulationResult simResult;
   private Army attackingArmy;
   private Army defendingArmy;
+  private final static Logger LOG = Logger.getLogger(false);
 
   public Simulation(String attackingArmyPattern, String defendingArmyPattern, int numberOfRounds) {
     this.attackingArmyPattern = attackingArmyPattern;
@@ -41,13 +44,16 @@ public class Simulation {
 
   public static void main(String[] args) throws InvalidArmyException {
     System.out.println("Starting Simulation ....");
+    long start = System.currentTimeMillis();
     Simulation sim = new Simulation("200 S, 1G", "160 RB, 10 WL, 30 WH", MAX_RUNS);
     SimulationResult simResult = sim.simulate();
 
-    System.out.printf("Done %s Runs\n", new Object[] {simResult.getNumberOfSimulationRuns()});
-    System.out.printf("Min Player losses: %s\n", new Object[] {UnitPatternHelper.createPatternFromMap(simResult.getMinPlayerLosses())});
-    System.out.printf("Max Player losses: %s\n", new Object[] {UnitPatternHelper.createPatternFromMap(simResult.getMaxPlayerLosses())});
-    System.out.printf("Min Computer losses: %s\n", new Object[] {UnitPatternHelper.createPatternFromMap(simResult.getMinComputerLosses())});
-    System.out.printf("Max Computer losses: %s\n", new Object[] {UnitPatternHelper.createPatternFromMap(simResult.getMaxComputerLosses())});
+    LOG.info("Done %s Runs", simResult.getNumberOfSimulationRuns());
+    LOG.info("Min Player losses: %s", new Object[] {UnitPatternHelper.createPatternFromMap(simResult.getMinPlayerLosses())});
+    LOG.info("Max Player losses: %s", new Object[] {UnitPatternHelper.createPatternFromMap(simResult.getMaxPlayerLosses())});
+    LOG.info("Min Computer losses: %s", new Object[] {UnitPatternHelper.createPatternFromMap(simResult.getMinComputerLosses())});
+    LOG.info("Max Computer losses: %s", new Object[] {UnitPatternHelper.createPatternFromMap(simResult.getMaxComputerLosses())});
+    LOG.info("Time: %s s", new Object[] {(System.currentTimeMillis() - start) / 1000});
+    LogManager.shutdown();
   }
 }

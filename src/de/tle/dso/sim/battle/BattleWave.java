@@ -1,5 +1,6 @@
 package de.tle.dso.sim.battle;
 
+import com.spinn3r.log5j.Logger;
 import static de.tle.dso.units.SpecialAttack.*;
 import de.tle.dso.units.Army;
 import de.tle.dso.units.Initiative;
@@ -15,6 +16,7 @@ public class BattleWave {
   Iterator<Unit> defendersByHp;
   Iterator<Unit> currentDefenseLine;
   Unit currentlyAttackedUnit = null;
+  private final static Logger LOG = Logger.getLogger(false);
 
   public BattleWave(Army attackingArmy, Army defendingArmy, Initiative phase) {
     this.attackingArmy = attackingArmy;
@@ -48,7 +50,7 @@ public class BattleWave {
 
   private void doSingleDamage(int damageDone, Unit attacker) {
     currentlyAttackedUnit.reduceHitpoints(damageDone);
-//    System.out.printf("%s verursacht %s Schaden an %s (%s HP)\n", new Object[]{attacker.getName(), damageDone, currentlyAttackedUnit.getName(), currentlyAttackedUnit.getCurrentHitPoints()});
+    LOG.debug("%s verursacht %s Schaden an %s (%s HP)", new Object[]{attacker.getName(), damageDone, currentlyAttackedUnit.getName(), currentlyAttackedUnit.getCurrentHitPoints()});
 
     if (currentlyAttackedUnit.isDead()) {
       currentlyAttackedUnit = null;
@@ -58,7 +60,7 @@ public class BattleWave {
   private void doSplashDamage(int overallDamage, Unit attacker) {
     do {
       int actualDamageDone = currentlyAttackedUnit.reduceHitpoints(overallDamage);
-//      System.out.printf("%s verursacht %s Schaden an %s (%s HP)\n", new Object[]{attacker.getName(), actualDamageDone, currentlyAttackedUnit.getName(), currentlyAttackedUnit.isDead() ? "0" : currentlyAttackedUnit.getCurrentHitPoints()});
+      LOG.debug("%s verursacht %s Schaden an %s (%s HP)", new Object[]{attacker.getName(), actualDamageDone, currentlyAttackedUnit.getName(), currentlyAttackedUnit.isDead() ? "0" : currentlyAttackedUnit.getCurrentHitPoints()});
       overallDamage -= actualDamageDone;
 
       if (currentlyAttackedUnit.isDead()) {
