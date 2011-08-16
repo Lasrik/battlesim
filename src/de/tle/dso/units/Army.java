@@ -7,6 +7,7 @@ import de.tle.dso.units.sort.SortByPrioComparator;
 import de.tle.dso.units.util.UnitPatternHelper;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 public class Army {
@@ -44,18 +45,11 @@ public class Army {
   }
 
   public List<Unit> getUnitsByPrio() {
-    // Collections.sort(sortedList, new SortByPrioComparator());
-    Unit[] tmpArray = units.toArray(new Unit[] {});
-    HeapSort.heapsort(tmpArray, new SortByPrioComparator());
-    List<Unit> sortedList = Arrays.asList(tmpArray);
-    return sortedList;
+    return sort(new SortByPrioComparator());
   }
 
   public List<Unit> getUnitsByHitpoints() {
-    Unit[] tmpArray = units.toArray(new Unit[] {});
-    HeapSort.heapsort(tmpArray, new SortByMaxHitPointsAscThenPrioComparator());
-    List<Unit> sortedList = Arrays.asList(tmpArray);
-    return sortedList;
+    return sort(new SortByMaxHitPointsAscThenPrioComparator());
   }
 
   public List<Unit> removeDeadUnits() {
@@ -89,5 +83,12 @@ public class Army {
   @Override
   public String toString() {
     return UnitPatternHelper.createPatternFromArmy(this);
+  }
+
+  private List<Unit> sort(Comparator<Unit> comparator) {
+    Unit[] tmpArray = units.toArray(new Unit[0]);
+    HeapSort.heapsort(tmpArray, comparator);
+    List<Unit> sortedList = Arrays.asList(tmpArray);
+    return sortedList;
   }
 }
