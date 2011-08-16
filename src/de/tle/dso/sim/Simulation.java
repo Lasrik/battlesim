@@ -20,7 +20,7 @@ import java.util.logging.Level;
 
 public class Simulation {
 
-  private static int MAX_RUNS = 10000;
+  private static int MAX_RUNS = 1000;
   private String attackingArmyPattern;
   private String defendingArmyPattern;
   private int numberOfRounds;
@@ -34,33 +34,34 @@ public class Simulation {
     this.numberOfRounds = numberOfRounds;
     this.simResult = new SimulationResult();
 
-    int numberOfThreads = Runtime.getRuntime().availableProcessors() * 2;
-    LOG.info("Number of processors: %s", numberOfThreads);
+    int numberOfThreads = Runtime.getRuntime().availableProcessors();
 
     this.threadPool = new ThreadPoolExecutor(numberOfThreads, numberOfThreads, 1, TimeUnit.MINUTES, new LinkedBlockingQueue<Runnable>());
   }
 
   public SimulationResult simulate() throws InvalidArmyException {
-    List<BattleSimulatorRunner> listOfBattleRunners = new LinkedList<BattleSimulatorRunner>();
+    for (int rounds = 0; rounds < numberOfRounds; rounds++) {
+      List<BattleSimulatorRunner> listOfBattleRunners = new LinkedList<BattleSimulatorRunner>();
 
-    for (int i = 0; i < numberOfRounds; i++) {
-      Army attackingArmy = UnitPatternHelper.createArmyFromPattern(attackingArmyPattern);
-      Army defendingArmy = UnitPatternHelper.createArmyFromPattern(defendingArmyPattern);
+      for (int i = 0; i < 100; i++) {
+        Army attackingArmy = UnitPatternHelper.createArmyFromPattern(attackingArmyPattern);
+        Army defendingArmy = UnitPatternHelper.createArmyFromPattern(defendingArmyPattern);
 
-      listOfBattleRunners.add(new BattleSimulatorRunner(attackingArmy, defendingArmy));
-    }
-
-    try {
-      List<Future<BattleResult>> results = threadPool.invokeAll(listOfBattleRunners);
-      for (Future<BattleResult> battleResult : results) {
-        try {
-          simResult.addBattleResult(battleResult.get());
-        } catch (ExecutionException ex) {
-          java.util.logging.Logger.getLogger(Simulation.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        listOfBattleRunners.add(new BattleSimulatorRunner(attackingArmy, defendingArmy));
       }
-    } catch (InterruptedException ex) {
-      // ignore
+
+      try {
+        List<Future<BattleResult>> results = threadPool.invokeAll(listOfBattleRunners);
+        for (Future<BattleResult> battleResult : results) {
+          try {
+            simResult.addBattleResult(battleResult.get());
+          } catch (ExecutionException ex) {
+            java.util.logging.Logger.getLogger(Simulation.class.getName()).log(Level.SEVERE, null, ex);
+          }
+        }
+      } catch (InterruptedException ex) {
+        // ignore
+      }
     }
 
     return simResult;
