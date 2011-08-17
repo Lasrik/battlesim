@@ -15,7 +15,7 @@ public class BattleWave {
   private Iterator<Unit> defendersByPrio;
   private Iterator<Unit> defendersByHp;
   private Iterator<Unit> currentDefenseLine;
-  private Unit currentlyAttackedUnit = null;
+  private Unit currentDefender = null;
   private final static Logger LOG = Logger.getLogger(false);
 
   public BattleWave(Army attackingArmy, Army defendingArmy, Initiative phase) {
@@ -29,9 +29,7 @@ public class BattleWave {
   public void fight() {
     for (Unit attacker : attackingArmy.getUnitsByPrio()) {
       if (matchesPhase(attacker)) {
-
-        chooseDefendersOrder(attacker);
-        chooseNextUnitToBeAttacked();
+        chooseNextUnitToBeAttacked(attacker);
 
         if (noMoreDefenders()) {
           break;
@@ -49,34 +47,35 @@ public class BattleWave {
   }
 
   private void doSingleDamage(int damageDone, Unit attacker) {
-    currentlyAttackedUnit.reduceHitpoints(damageDone);
-    LOG.debug("%s verursacht %s Schaden an %s (%s HP)", attacker.getName(), damageDone, currentlyAttackedUnit.getName(), currentlyAttackedUnit.getCurrentHitPoints());
+    currentDefender.reduceHitpoints(damageDone);
+    LOG.debug("%s verursacht %s Schaden an %s (%s HP)", attacker.getName(), damageDone, currentDefender.getName(), currentDefender.getCurrentHitPoints());
 
-    if (currentlyAttackedUnit.isDead()) {
-      currentlyAttackedUnit = null;
+    if (currentDefender.isDead()) {
+      currentDefender = null;
     }
   }
 
   private void doSplashDamage(int overallDamage, Unit attacker) {
     do {
-      int actualDamageDone = currentlyAttackedUnit.reduceHitpoints(overallDamage);
-      LOG.debug("%s verursacht %s Schaden an %s (%s HP)", attacker.getName(), actualDamageDone, currentlyAttackedUnit.getName(), currentlyAttackedUnit.isDead() ? "0" : currentlyAttackedUnit.getCurrentHitPoints());
+      int actualDamageDone = currentDefender.reduceHitpoints(overallDamage);
+      LOG.debug("%s verursacht %s Schaden an %s (%s HP)", attacker.getName(), actualDamageDone, currentDefender.getName(), currentDefender.isDead() ? "0" : currentDefender.getCurrentHitPoints());
       overallDamage -= actualDamageDone;
 
-      if (currentlyAttackedUnit.isDead()) {
-        currentlyAttackedUnit = null;
-        chooseNextUnitToBeAttacked();
+      if (currentDefender.isDead()) {
+        currentDefender = null;
+        chooseNextUnitToBeAttacked(attacker);
       }
-    } while (overallDamage > 0 && currentlyAttackedUnit != null);
+    } while (overallDamage > 0 && currentDefender != null);
   }
 
   private boolean noMoreDefenders() {
-    return currentlyAttackedUnit == null && !currentDefenseLine.hasNext();
+    return currentDefender == null && !currentDefenseLine.hasNext();
   }
 
-  private void chooseNextUnitToBeAttacked() {
-    if (currentlyAttackedUnit == null && currentDefenseLine.hasNext()) {
-      currentlyAttackedUnit = currentDefenseLine.next();
+  private void chooseNextUnitToBeAttacked(Unit attacker) {
+    chooseDefendersOrder(attacker);
+    if (currentDefender == null && currentDefenseLine.hasNext()) {
+      currentDefender = currentDefenseLine.next();
     }
   }
 
