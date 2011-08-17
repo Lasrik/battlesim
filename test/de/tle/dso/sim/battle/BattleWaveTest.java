@@ -69,15 +69,16 @@ public class BattleWaveTest {
 
     startFight(MEDIUM);
 
-    verify(defenders.getUnits().get(1), never()).doDamage();
+    verify(defenders.getUnits().get(1), never()).reduceHitpoints(anyInt());
   }
 
   @Test
   public void testFight4() {
-    attackers = createMockArmy("2 R");
+    attackers = createMockArmy("2 LB");
     defenders = createMockArmy("1 PL");
 
-    when(attackers.getUnits().get(0).doDamage()).thenReturn(1);
+    // when(attackers.getUnits().get(0).doDamage()).thenReturn(1);
+    when(defenders.getUnits().get(0).isDead()).thenReturn(Boolean.FALSE);
 
     startFight(MEDIUM);
 
@@ -102,7 +103,14 @@ public class BattleWaveTest {
 
   @Test
   public void testSplash() {
-    
+    attackers = createMockArmy("1 CK");
+    defenders = createMockArmy("50 R");
+
+    startFight(LOW);
+
+    for (Unit unit : defenders.getUnits()) {
+      verify(unit, times(1)).reduceHitpoints(anyInt());
+    }
   }
 
   private Army createMockArmy(String pattern) {
