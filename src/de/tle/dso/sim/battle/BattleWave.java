@@ -12,10 +12,10 @@ public class BattleWave {
   private Army attackingArmy;
   private Army defendingArmy;
   private Initiative phase;
-  Iterator<Unit> defendersByPrio;
-  Iterator<Unit> defendersByHp;
-  Iterator<Unit> currentDefenseLine;
-  Unit currentlyAttackedUnit = null;
+  private Iterator<Unit> defendersByPrio;
+  private Iterator<Unit> defendersByHp;
+  private Iterator<Unit> currentDefenseLine;
+  private Unit currentlyAttackedUnit = null;
   private final static Logger LOG = Logger.getLogger(false);
 
   public BattleWave(Army attackingArmy, Army defendingArmy, Initiative phase) {
@@ -50,7 +50,7 @@ public class BattleWave {
 
   private void doSingleDamage(int damageDone, Unit attacker) {
     currentlyAttackedUnit.reduceHitpoints(damageDone);
-    LOG.debug("%s verursacht %s Schaden an %s (%s HP)", new Object[]{attacker.getName(), damageDone, currentlyAttackedUnit.getName(), currentlyAttackedUnit.getCurrentHitPoints()});
+    LOG.debug("%s verursacht %s Schaden an %s (%s HP)", attacker.getName(), damageDone, currentlyAttackedUnit.getName(), currentlyAttackedUnit.getCurrentHitPoints());
 
     if (currentlyAttackedUnit.isDead()) {
       currentlyAttackedUnit = null;
@@ -60,7 +60,7 @@ public class BattleWave {
   private void doSplashDamage(int overallDamage, Unit attacker) {
     do {
       int actualDamageDone = currentlyAttackedUnit.reduceHitpoints(overallDamage);
-      LOG.debug("%s verursacht %s Schaden an %s (%s HP)", new Object[]{attacker.getName(), actualDamageDone, currentlyAttackedUnit.getName(), currentlyAttackedUnit.isDead() ? "0" : currentlyAttackedUnit.getCurrentHitPoints()});
+      LOG.debug("%s verursacht %s Schaden an %s (%s HP)", attacker.getName(), actualDamageDone, currentlyAttackedUnit.getName(), currentlyAttackedUnit.isDead() ? "0" : currentlyAttackedUnit.getCurrentHitPoints());
       overallDamage -= actualDamageDone;
 
       if (currentlyAttackedUnit.isDead()) {
