@@ -10,6 +10,7 @@ import de.tle.dso.units.computer.Steinwerfer;
 import de.tle.dso.units.computer.Wachhund;
 import de.tle.dso.units.computer.Waldläufer;
 import de.tle.dso.units.computer.boss.Chuck;
+import de.tle.dso.units.computer.boss.Waltraud;
 import de.tle.dso.units.player.Armbrustschütze;
 import de.tle.dso.units.player.Bogenschütze;
 import de.tle.dso.units.player.Elitesoldat;
@@ -75,5 +76,20 @@ public class SortByMaxHitPointsAscThenPrioComparatorTest {
     assertTrue(units.get(2) instanceof Plünderer);
     assertTrue(units.get(3) instanceof Schläger);
     assertTrue(units.get(4) instanceof Chuck);
+  }
+
+  @Test
+  public void testCompare4() {
+    Army army = UnitPatternHelper.createArmyFromPattern("1 WH, 1 DWW, 1 CK, 1 WL, 1 PL, 1 SL");
+    List<Unit> units = army.getUnits();
+
+    Collections.sort(units, new SortByMaxHitPointsAscThenPrioComparator());
+
+    assertTrue(units.get(0) instanceof Wachhund);
+    assertTrue(units.get(1) instanceof Waldläufer);
+    assertTrue(units.get(2) instanceof Plünderer);
+    assertTrue(units.get(3) instanceof Schläger);
+    assertTrue(units.get(4) instanceof Chuck);
+    assertTrue(units.get(5) instanceof Waltraud);
   }
 }

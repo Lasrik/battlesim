@@ -8,6 +8,8 @@ import de.tle.dso.units.computer.Schläger;
 import de.tle.dso.units.computer.Steinwerfer;
 import de.tle.dso.units.computer.Wachhund;
 import de.tle.dso.units.computer.Waldläufer;
+import de.tle.dso.units.computer.boss.Bert;
+import de.tle.dso.units.computer.boss.Waltraud;
 import de.tle.dso.units.player.Armbrustschütze;
 import de.tle.dso.units.player.Bogenschütze;
 import de.tle.dso.units.player.Elitesoldat;
@@ -87,4 +89,30 @@ public class SortByPrioComparatorTest {
     assertEquals(37, units.get(0).getCurrentHitPoints());
     assertEquals(40, units.get(1).getCurrentHitPoints());
   }
+
+  @Test
+  public void test4() {
+    Army army = UnitPatternHelper.createArmyFromPattern("199 WH, 1 DWW");
+    List<Unit> units = army.getUnits();
+    Collections.sort(units, new SortByPrioComparator());
+
+    assertTrue(units.get(0) instanceof Waltraud);
+    assertTrue(units.get(1) instanceof Wachhund);
+  }
+
+    @Test
+  public void testCompareComputerUnits2() {
+    Army army = UnitPatternHelper.createArmyFromPattern("1 EB, 1 WH, 1 SW, 1 RB, 1 WL, 1 PL, 1 SL");
+    List<Unit> units = army.getUnits();
+    Collections.sort(units, new SortByPrioComparator());
+    assertTrue(units.get(0) instanceof Plünderer);
+    assertTrue(units.get(1) instanceof Schläger);
+    assertTrue(units.get(2) instanceof Wachhund);
+    assertTrue(units.get(3) instanceof Raufbold);
+    assertTrue(units.get(4) instanceof Steinwerfer);
+    assertTrue(units.get(5) instanceof Waldläufer);
+    assertTrue(units.get(6) instanceof Bert);
+
+  }
+
 }

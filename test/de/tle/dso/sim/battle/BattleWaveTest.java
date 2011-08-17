@@ -4,53 +4,54 @@ import de.tle.dso.units.Army;
 import de.tle.dso.units.Initiative;
 import de.tle.dso.units.Unit;
 import de.tle.dso.units.computer.Plünderer;
-import de.tle.dso.units.player.General;
-import de.tle.dso.units.player.Reiterei;
 import de.tle.dso.units.player.Rekrut;
+import de.tle.dso.units.util.UnitPatternHelper;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
+import static de.tle.dso.units.Initiative.*;
 
 public class BattleWaveTest {
 
   private Army attackers;
   private Army defenders;
-  private BattleWave wave;
-  private Unit mockRekrut;
-  private Unit mockPlünderer;
-  private Unit mockGeneral;
-  private Unit mockReiterei;
 
   @Before
   public void setUp() {
     attackers = new Army();
     defenders = new Army();
-
-    mockRekrut = spy(new Rekrut());
-    mockPlünderer = spy(new Plünderer());
-    mockGeneral = spy(new General());
-    mockReiterei = spy(new Reiterei());
-
-    attackers.add(mockRekrut);
-    defenders.add(mockPlünderer);
-
-    wave = new BattleWave(attackers, defenders, Initiative.MEDIUM);
   }
 
   @Test
-  public void testFight() {
-    attackers.add(mockReiterei);
-    wave.fight();
-    verify(mockReiterei, never()).doDamage();
+  public void testInitiative() {
+    attackers = createMockArmy("3 R, 3 C, 1 K");
+    defenders = createMockArmy("200 PL");
+
+    startFight(Initiative.MEDIUM);
+
+    for (Unit unit : attackers.getUnits()) {
+      if (unit.getInitiative().equals(HIGH) || unit.getInitiative().equals(LOW)) {
+        verify(unit, never()).doDamage();
+      } else if (unit.getInitiative().equals(MEDIUM)) {
+        verify(unit, times(1)).doDamage();
+      }
+    }
   }
 
   @Test
   public void testFight2() {
+    Unit mockRekrut = spy(new Rekrut());
+
     when(mockRekrut.doDamage()).thenReturn(666);
 
-    wave.fight();
+    Unit mockPlünderer = spy(new Plünderer());
+
+    attackers.add(mockRekrut);
+    defenders.add(mockPlünderer);
+
+    startFight(MEDIUM);
 
     verify(mockPlünderer, times(1)).reduceHitpoints(666);
 
@@ -61,31 +62,62 @@ public class BattleWaveTest {
 
   @Test
   public void testFight3() {
-    Unit mockRekrut2 = spy(new Rekrut());
-    attackers.add(mockRekrut2);
+    attackers = createMockArmy("1 R");
+    defenders = createMockArmy("2 PL");
 
-    when(mockRekrut.doDamage()).thenReturn(666);
+    when(attackers.getUnits().get(0).doDamage()).thenReturn(666);
 
-    wave.fight();
+    startFight(MEDIUM);
 
-    verify(mockRekrut2, never()).doDamage();
+    verify(defenders.getUnits().get(1), never()).doDamage();
   }
 
   @Test
   public void testFight4() {
-    Unit mockRekrut2 = spy(new Rekrut());
-    attackers.add(mockRekrut2);
+    attackers = createMockArmy("2 R");
+    defenders = createMockArmy("1 PL");
 
-    when(mockRekrut.doDamage()).thenReturn(1);
+    when(attackers.getUnits().get(0).doDamage()).thenReturn(1);
 
-    wave.fight();
+    startFight(MEDIUM);
 
-    verify(mockRekrut2, times(1)).doDamage();
+    verify(attackers.getUnits().get(1), times(1)).doDamage();
   }
 
   @Test
   public void testAttackersAreNotAttacked() {
-    wave.fight();
-    verify(mockRekrut, never()).reduceHitpoints(anyInt());
+    attackers = createMockArmy("1 R, 2 C, 1 K, 1G");
+    defenders = createMockArmy("1 PL, 2 WH, 1 EB, 1 DWW");
+
+    startFight(MEDIUM);
+
+    for (Unit unit : attackers.getUnits()) {
+      verify(unit, never()).reduceHitpoints(anyInt());
+    }
+
+    for (Unit unit : defenders.getUnits()) {
+      verify(unit, never()).doDamage();
+    }
+  }
+
+  @Test
+  public void testSplash() {
+    
+  }
+
+  private Army createMockArmy(String pattern) {
+    Army army = UnitPatternHelper.createArmyFromPattern(pattern);
+    List<Unit> units = army.getUnits();
+
+    for (int i = 0; i < units.size(); i++) {
+      Unit unit = units.get(i);
+      units.set(i, spy(unit));
+    }
+
+    return army;
+  }
+
+  private void startFight(Initiative phase) {
+    new BattleWave(attackers, defenders, phase).fight();
   }
 }
