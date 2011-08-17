@@ -13,6 +13,7 @@ public class SimulationResult {
   private Map<Class<? extends Unit>, Integer> minComputerLosses;
   private Map<Class<? extends Unit>, Integer> maxComputerLosses;
   private int numberOfSimulationRuns;
+  private long simDuration;
 
   public SimulationResult() {
     this.minComputerLosses = new HashMap<Class<? extends Unit>, Integer>();
@@ -49,6 +50,18 @@ public class SimulationResult {
 
   public int getNumberOfSimulationRuns() {
     return numberOfSimulationRuns;
+  }
+
+  public long getSimDuration() {
+    return simDuration;
+  }
+
+  public void setSimDuration(long simDuration) {
+    this.simDuration = simDuration;
+  }
+
+  public double getBattlesPerSecond() {
+    return ((double) numberOfSimulationRuns / ((double) simDuration / 1000d));
   }
 
   private int getMinimum(Class<? extends Unit> unitClass, Map<Class<? extends Unit>, Integer> map1, Map<Class<? extends Unit>, Integer> map2) {

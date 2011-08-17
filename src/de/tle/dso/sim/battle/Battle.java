@@ -31,7 +31,7 @@ public class Battle {
   }
 
   private void startBattle() {
-    LOG.info("Kampf beginnt.");
+    LOG.debug("Kampf beginnt.");
 
     int roundNumber = 0;
     while (!endBattle()) {
@@ -47,7 +47,7 @@ public class Battle {
       }
     }
 
-    LOG.info("Kampf ende.");
+    LOG.debug("Kampf ende.");
   }
 
   private void defendersFightBack(Initiative phase) {
@@ -106,8 +106,8 @@ public class Battle {
 
   private void logBattleOutcome() {
     LOG.info("Verluste Spieler: %s", UnitPatternHelper.createPatternFromMap(battleResult.playerLosses));
-    LOG.debug("Verluste Computer: %s", UnitPatternHelper.createPatternFromMap(battleResult.computerLosses));
-    LOG.debug(battleResult.battleWon ? "GEWONNEN" : "VERLOREN");
+    LOG.info("Verluste Computer: %s", UnitPatternHelper.createPatternFromMap(battleResult.computerLosses));
+    LOG.info(battleResult.battleWon ? "GEWONNEN" : "VERLOREN");
     LOG.debug("+++++++++++++++++++++++++++++++++++++++++++++++++");
     LOG.debug("+++++++++++++++++++++++++++++++++++++++++++++++++");
   }

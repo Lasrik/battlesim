@@ -24,12 +24,17 @@ public class Simulation {
   }
 
   public SimulationResult simulate() throws InvalidArmyException {
+    long start = System.currentTimeMillis();
+
     for (int rounds = 0; rounds < numberOfRounds; rounds++) {
       Army attackingArmy = createArmy(attackingArmyPattern);
       Army defendingArmy = createArmy(defendingArmyPattern);
       Battle battle = new Battle(attackingArmy, defendingArmy);
       simResult.addBattleResult(battle.simulateBattle());
     }
+
+    simResult.setSimDuration(System.currentTimeMillis() - start);
+    logResults();
 
     return simResult;
   }
@@ -41,16 +46,18 @@ public class Simulation {
 
   public static void main(String[] args) throws InvalidArmyException {
     LOG.info("Starting Simulation ....");
-    long start = System.currentTimeMillis();
     Simulation sim = new Simulation("200 S, 1G", "160 RB, 10 WL, 30 WH");
-    SimulationResult simResult = sim.simulate();
+    sim.simulate();
+    LogManager.shutdown();
+  }
 
+  private void logResults() {
     LOG.info("Done %s Runs", simResult.getNumberOfSimulationRuns());
     LOG.info("Min Player losses: %s", UnitPatternHelper.createPatternFromMap(simResult.getMinPlayerLosses()));
     LOG.info("Max Player losses: %s", UnitPatternHelper.createPatternFromMap(simResult.getMaxPlayerLosses()));
     LOG.info("Min Computer losses: %s", UnitPatternHelper.createPatternFromMap(simResult.getMinComputerLosses()));
     LOG.info("Max Computer losses: %s", UnitPatternHelper.createPatternFromMap(simResult.getMaxComputerLosses()));
-    LOG.info("Time: %s s", (System.currentTimeMillis() - start) / 1000);
-    LogManager.shutdown();
+    LOG.debug("Battles simulated per second: %.2f/s", simResult.getBattlesPerSecond());
+    LOG.debug("Total time: %ss", (simResult.getSimDuration() / 1000));
   }
 }

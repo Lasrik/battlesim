@@ -1,6 +1,5 @@
 package de.tle.dso.sim.battle;
 
-import de.tle.dso.units.Army;
 import de.tle.dso.units.Unit;
 import java.util.HashMap;
 import java.util.List;
@@ -11,6 +10,7 @@ public class BattleResult {
   protected Map<Class<? extends Unit>, Integer> playerLosses;
   protected Map<Class<? extends Unit>, Integer> computerLosses;
   protected boolean battleWon = false;
+  protected long battleDuration;
 
   public BattleResult() {
     this.playerLosses = new HashMap<Class<? extends Unit>, Integer>();
@@ -51,6 +51,14 @@ public class BattleResult {
     for (Unit unit : deadUnits) {
       addDeadComputerUnit(unit);
     }
+  }
+
+  public long getBattleDuration() {
+    return battleDuration;
+  }
+
+  public void setBattleDuration(long battleDuration) {
+    this.battleDuration = battleDuration;
   }
 
   private void incCount(Unit deadUnit, Map<Class<? extends Unit>, Integer> map) {
