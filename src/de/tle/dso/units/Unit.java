@@ -1,5 +1,6 @@
 package de.tle.dso.units;
 
+import de.tle.dso.resources.ResourceCost;
 import java.util.Random;
 
 public abstract class Unit {
@@ -9,11 +10,11 @@ public abstract class Unit {
   protected int minDamage;
   protected int maxDamage;
   protected int hitChancePercent;
+  protected int priority;
   protected SpecialAttack specialAttacks = SpecialAttack.NONE;
   protected SpecialDefense specialDefense = SpecialDefense.NONE;
-  protected String resourceCost;
-  protected Initiative initiative;
-  protected int priority;
+  protected ResourceCost resourceCost = ResourceCost.none();
+  protected Initiative initiative = Initiative.MEDIUM;
   private static Random rand = new Random(System.currentTimeMillis());
 
   public abstract String getName();
@@ -52,7 +53,7 @@ public abstract class Unit {
     return minDamage;
   }
 
-  public String getResourceCost() {
+  public ResourceCost getResourceCost() {
     return resourceCost;
   }
 
