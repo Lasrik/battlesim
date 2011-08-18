@@ -1,8 +1,11 @@
 package de.tle.dso.sim;
 
+import de.tle.dso.resources.Resource;
+import de.tle.dso.resources.ResourceCost;
 import de.tle.dso.sim.battle.BattleResult;
 import de.tle.dso.units.Army;
 import de.tle.dso.units.Unit;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -62,6 +65,14 @@ public class SimulationResult {
 
   public double getBattlesPerSecond() {
     return ((double) numberOfSimulationRuns / ((double) simDuration / 1000d));
+  }
+
+  public Map<Resource, Integer> getMaxResourceCost() {
+    for (Class<? extends Unit> unit : maxPlayerLosses.keySet()) {
+
+    }
+
+    return Collections.EMPTY_MAP;
   }
 
   private int getMinimum(Class<? extends Unit> unitClass, Map<Class<? extends Unit>, Integer> map1, Map<Class<? extends Unit>, Integer> map2) {
