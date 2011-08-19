@@ -1,7 +1,8 @@
 package de.tle.dso.units.player;
 
+import static de.tle.dso.resources.Resource.*;
+import de.tle.dso.resources.ResourceCost;
 import de.tle.dso.units.Initiative;
-import de.tle.dso.units.Unit;
 
 public class Soldat extends PlayerUnit {
 
@@ -16,6 +17,7 @@ public class Soldat extends PlayerUnit {
     this.hitChancePercent = 85;
     this.initiative = Initiative.MEDIUM;
     this.priority = 4;
+    this.resourceCost = ResourceCost.build(SETTLER, 1, BEER, 15, STEEL_SWORD, 10);
   }
 
   @Override

@@ -1,7 +1,8 @@
 package de.tle.dso.units.player;
 
+import static de.tle.dso.resources.Resource.*;
+import de.tle.dso.resources.ResourceCost;
 import de.tle.dso.units.Initiative;
-import de.tle.dso.units.Unit;
 
 public class Miliz extends PlayerUnit {
 
@@ -16,6 +17,7 @@ public class Miliz extends PlayerUnit {
     this.hitChancePercent = 80;
     this.initiative = Initiative.MEDIUM;
     this.priority = 2;
+    this.resourceCost = ResourceCost.build(SETTLER, 1, BEER, 10, IRON_SWORD, 10);
   }
 
   @Override

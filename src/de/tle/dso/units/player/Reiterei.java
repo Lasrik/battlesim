@@ -1,8 +1,9 @@
 package de.tle.dso.units.player;
 
+import static de.tle.dso.resources.Resource.*;
+import de.tle.dso.resources.ResourceCost;
 import de.tle.dso.units.Initiative;
 import de.tle.dso.units.SpecialAttack;
-import de.tle.dso.units.Unit;
 
 public class Reiterei extends PlayerUnit {
 
@@ -18,6 +19,7 @@ public class Reiterei extends PlayerUnit {
     this.initiative = Initiative.HIGH;
     this.priority = 3;
     this.specialAttacks = SpecialAttack.ATTACK_WEAKEST;
+    this.resourceCost = ResourceCost.build(SETTLER, 1, BEER, 30, HORSE, 40);
   }
 
   @Override

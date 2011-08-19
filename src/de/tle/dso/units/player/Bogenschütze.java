@@ -1,7 +1,8 @@
 package de.tle.dso.units.player;
 
+import de.tle.dso.resources.ResourceCost;
 import de.tle.dso.units.Initiative;
-import de.tle.dso.units.Unit;
+import static de.tle.dso.resources.Resource.*;
 
 public class Bogenschütze extends PlayerUnit {
 
@@ -16,6 +17,7 @@ public class Bogenschütze extends PlayerUnit {
     this.hitChancePercent = 80;
     this.initiative = Initiative.MEDIUM;
     this.priority = 6;
+    this.resourceCost = ResourceCost.build(SETTLER, 1, BEER, 10, BOW, 10);
   }
 
   @Override

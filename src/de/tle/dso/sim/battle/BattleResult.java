@@ -1,6 +1,9 @@
 package de.tle.dso.sim.battle;
 
+import de.tle.dso.resources.Resource;
+import de.tle.dso.resources.ResourceCost;
 import de.tle.dso.units.Unit;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,10 +14,12 @@ public class BattleResult {
   protected Map<Class<? extends Unit>, Integer> computerLosses;
   protected boolean battleWon = false;
   protected long battleDuration;
+  protected ResourceCost resourceCosts;
 
   public BattleResult() {
     this.playerLosses = new HashMap<Class<? extends Unit>, Integer>();
     this.computerLosses = new HashMap<Class<? extends Unit>, Integer>();
+    this.resourceCosts = new ResourceCost(new EnumMap<Resource, Integer>(Resource.class));
   }
 
   public boolean isBattleWon() {
@@ -35,6 +40,7 @@ public class BattleResult {
 
   public void addDeadPlayerUnit(Unit deadUnit) {
     incCount(deadUnit, playerLosses);
+    resourceCosts.add(deadUnit.getResourceCost());
   }
 
   public void addDeadComputerUnit(Unit deadUnit) {

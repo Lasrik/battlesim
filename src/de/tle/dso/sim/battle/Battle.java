@@ -105,10 +105,11 @@ public class Battle {
   }
 
   private void logBattleOutcome() {
+    LOG.info("+++++++++++++++++++++++++++++++++++++++++++++++++");
     LOG.info("Verluste Spieler: %s", UnitPatternHelper.createPatternFromMap(battleResult.playerLosses));
     LOG.info("Verluste Computer: %s", UnitPatternHelper.createPatternFromMap(battleResult.computerLosses));
     LOG.info(battleResult.battleWon ? "GEWONNEN" : "VERLOREN");
-    LOG.debug("+++++++++++++++++++++++++++++++++++++++++++++++++");
-    LOG.debug("+++++++++++++++++++++++++++++++++++++++++++++++++");
+    LOG.info("Resourcen: %s", battleResult.resourceCosts);
+    LOG.info("+++++++++++++++++++++++++++++++++++++++++++++++++");
   }
 }
