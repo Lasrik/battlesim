@@ -57,6 +57,8 @@ public class Simulation {
     LOG.info("Max Player losses: %s", UnitPatternHelper.createPatternFromMap(simResult.getMaxPlayerLosses()));
     LOG.info("Min Computer losses: %s", UnitPatternHelper.createPatternFromMap(simResult.getMinComputerLosses()));
     LOG.info("Max Computer losses: %s", UnitPatternHelper.createPatternFromMap(simResult.getMaxComputerLosses()));
+    LOG.info("Min resource cost: %s", simResult.getMinResourceCosts());
+    LOG.info("Max resource cost: %s", simResult.getMaxResourceCosts());
     LOG.debug("Battles simulated per second: %.2f/s", simResult.getBattlesPerSecond());
     LOG.debug("Total time: %ss", (simResult.getSimDuration() / 1000));
   }

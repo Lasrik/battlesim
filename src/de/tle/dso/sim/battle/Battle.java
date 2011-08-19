@@ -109,7 +109,7 @@ public class Battle {
     LOG.info("Verluste Spieler: %s", UnitPatternHelper.createPatternFromMap(battleResult.playerLosses));
     LOG.info("Verluste Computer: %s", UnitPatternHelper.createPatternFromMap(battleResult.computerLosses));
     LOG.info(battleResult.battleWon ? "GEWONNEN" : "VERLOREN");
-    LOG.info("Resourcen: %s", battleResult.resourceCosts);
+    LOG.info("Resourcen: %s", battleResult.getResourceCosts());
     LOG.info("+++++++++++++++++++++++++++++++++++++++++++++++++");
   }
 }

@@ -9,8 +9,9 @@ import java.util.Map;
 public class ResourceCost implements Comparable<ResourceCost> {
 
   protected Map<Resource, Integer> usedResources;
+  public final static ResourceCost NONE = new ResourceCost(Collections.EMPTY_MAP);
 
-  public ResourceCost(Map<Resource, Integer> usedResources) {
+  protected ResourceCost(Map<Resource, Integer> usedResources) {
     this.usedResources = usedResources;
   }
 
@@ -25,8 +26,8 @@ public class ResourceCost implements Comparable<ResourceCost> {
     });
   }
 
-  public static ResourceCost none() {
-    return new ResourceCost(Collections.EMPTY_MAP);
+  public static ResourceCost buildEmpty() {
+    return new ResourceCost(new EnumMap<Resource, Integer>(Resource.class));
   }
 
   public int totalWeightPoints() {
@@ -40,6 +41,9 @@ public class ResourceCost implements Comparable<ResourceCost> {
   }
 
   public void add(ResourceCost anotherCost) {
+    if (this == NONE) {
+      throw new UnsupportedOperationException("Cannot add resources to NONE.");
+    }
     for (Resource res : anotherCost.usedResources.keySet()) {
       int count = anotherCost.usedResources.get(res);
       if (this.usedResources.containsKey(res)) {
@@ -56,6 +60,9 @@ public class ResourceCost implements Comparable<ResourceCost> {
 
   @Override
   public String toString() {
+    if (this == NONE) {
+      return "NONE";
+    }
     return new Formatter().format("%s -> %s", usedResources, totalWeightPoints()).out().toString();
   }
 }

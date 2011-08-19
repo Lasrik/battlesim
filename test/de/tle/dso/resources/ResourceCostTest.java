@@ -3,6 +3,7 @@ package de.tle.dso.resources;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import static de.tle.dso.resources.Resource.*;
 
 public class ResourceCostTest {
 
@@ -12,23 +13,49 @@ public class ResourceCostTest {
 
   @Test
   public void testBuild() {
-    ResourceCost cost = ResourceCost.build(Resource.BEER, 1, Resource.SETTLER, 1, Resource.BRONCE_SWORD, 1);
-    int expectedNumber = Resource.BEER.weight + Resource.SETTLER.weight + Resource.BRONCE_SWORD.weight;
+    ResourceCost cost = ResourceCost.build(BEER, 1, SETTLER, 1, BRONCE_SWORD, 1);
+    int expectedNumber = BEER.weight + SETTLER.weight + BRONCE_SWORD.weight;
     int actualCost = cost.totalWeightPoints();
     assertEquals(expectedNumber, actualCost);
   }
 
   @Test
   public void testBuild2() {
-    ResourceCost cost = ResourceCost.build(Resource.BEER, 10, Resource.HORSE, 8, Resource.BRONCE_SWORD, 1);
-    int expectedNumber = Resource.BEER.weight * 10 + Resource.HORSE.weight * 8 + Resource.BRONCE_SWORD.weight * 1;
+    ResourceCost cost = ResourceCost.build(BEER, 10, HORSE, 8, BRONCE_SWORD, 1);
+    int expectedNumber = BEER.weight * 10 + HORSE.weight * 8 + BRONCE_SWORD.weight * 1;
     int actualCost = cost.totalWeightPoints();
     assertEquals(expectedNumber, actualCost);
   }
 
   @Test
   public void testNone() {
-    ResourceCost noCosts = ResourceCost.none();
+    ResourceCost noCosts = ResourceCost.NONE;
     assertEquals(0, noCosts.totalWeightPoints());
+  }
+
+  @Test(expected = UnsupportedOperationException.class)
+  public void testNoneCannotAdd() {
+    ResourceCost noCosts = ResourceCost.NONE;
+    ResourceCost otherCosts = ResourceCost.build(BEER, 10, HORSE, 8, BRONCE_SWORD, 1);
+
+    noCosts.add(otherCosts);
+  }
+
+  @Test
+  public void testNoneIsSmallerThanAll() {
+    ResourceCost noCosts = ResourceCost.NONE;
+    ResourceCost otherCosts = ResourceCost.build(BEER, 1, SETTLER, 1, BRONCE_SWORD, 1);
+    assertTrue(noCosts.compareTo(otherCosts) < 0);
+  }
+
+  @Test
+  public void testCompare() {
+    ResourceCost cost1 = ResourceCost.build(SETTLER, 1, BEER, 1, BRONCE_SWORD, 1);
+    ResourceCost cost2 = ResourceCost.build(SETTLER, 1, BEER, 1, BRONCE_SWORD, 2);
+    ResourceCost cost3 = ResourceCost.build(SETTLER, 1, BEER, 1, BRONCE_SWORD, 1);
+
+    assertTrue(cost1.compareTo(cost2) < 0);
+    assertTrue(cost2.compareTo(cost1) > 0);
+    assertTrue(cost1.compareTo(cost3) == 0);
   }
 }

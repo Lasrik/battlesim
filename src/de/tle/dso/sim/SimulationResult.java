@@ -1,11 +1,8 @@
 package de.tle.dso.sim;
 
-import de.tle.dso.resources.Resource;
 import de.tle.dso.resources.ResourceCost;
 import de.tle.dso.sim.battle.BattleResult;
-import de.tle.dso.units.Army;
 import de.tle.dso.units.Unit;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,6 +14,8 @@ public class SimulationResult {
   private Map<Class<? extends Unit>, Integer> maxComputerLosses;
   private int numberOfSimulationRuns;
   private long simDuration;
+  private ResourceCost minResourceCosts = ResourceCost.buildEmpty();
+  private ResourceCost maxResourceCosts = ResourceCost.buildEmpty();
 
   public SimulationResult() {
     this.minComputerLosses = new HashMap<Class<? extends Unit>, Integer>();
@@ -30,9 +29,21 @@ public class SimulationResult {
 
   public void addBattleResult(BattleResult battleResult) {
     updatePlayerLosses(battleResult);
+    updateResourceCost(battleResult);
+
     updateComputerLosses(battleResult);
 
     numberOfSimulationRuns++;
+  }
+
+  private void updateResourceCost(BattleResult battleResult) {
+    if (minResourceCosts.totalWeightPoints() == 0 || minResourceCosts.compareTo(battleResult.getResourceCosts()) > 0) {
+      minResourceCosts = battleResult.getResourceCosts();
+    }
+
+    if (maxResourceCosts.compareTo(battleResult.getResourceCosts()) < 0) {
+      maxResourceCosts = battleResult.getResourceCosts();
+    }
   }
 
   public Map<Class<? extends Unit>, Integer> getMaxComputerLosses() {
@@ -67,12 +78,12 @@ public class SimulationResult {
     return ((double) numberOfSimulationRuns / ((double) simDuration / 1000d));
   }
 
-  public Map<Resource, Integer> getMaxResourceCost() {
-    for (Class<? extends Unit> unit : maxPlayerLosses.keySet()) {
+  public ResourceCost getMinResourceCosts() {
+    return minResourceCosts;
+  }
 
-    }
-
-    return Collections.EMPTY_MAP;
+  public ResourceCost getMaxResourceCosts() {
+    return maxResourceCosts;
   }
 
   private int getMinimum(Class<? extends Unit> unitClass, Map<Class<? extends Unit>, Integer> map1, Map<Class<? extends Unit>, Integer> map2) {
