@@ -53,12 +53,12 @@ public class Simulation {
 
   private void logResults() {
     LOG.info("Done %s Runs", simResult.getNumberOfSimulationRuns());
-    LOG.info("Min Player losses: %s", UnitPatternHelper.createPatternFromMap(simResult.getMinPlayerLosses()));
-    LOG.info("Max Player losses: %s", UnitPatternHelper.createPatternFromMap(simResult.getMaxPlayerLosses()));
-    LOG.info("Min Computer losses: %s", UnitPatternHelper.createPatternFromMap(simResult.getMinComputerLosses()));
-    LOG.info("Max Computer losses: %s", UnitPatternHelper.createPatternFromMap(simResult.getMaxComputerLosses()));
-    LOG.info("Min resource cost: %s", simResult.getMinResourceCosts());
+    LOG.info("Min Player losses: %s", UnitPatternHelper.createPatternFromArmy(simResult.getMinPlayerLosses()));
+    LOG.info("Max Player losses: %s", UnitPatternHelper.createPatternFromArmy(simResult.getMaxPlayerLosses()));
+    LOG.info("Min Computer losses: %s", UnitPatternHelper.createPatternFromArmy(simResult.getMinComputerLosses()));
+    LOG.info("Max Computer losses: %s", UnitPatternHelper.createPatternFromArmy(simResult.getMaxComputerLosses()));
     LOG.info("Max resource cost: %s", simResult.getMaxResourceCosts());
+    LOG.info("Always win: %s", simResult.alwaysWin);
     LOG.debug("Battles simulated per second: %.2f/s", simResult.getBattlesPerSecond());
     LOG.debug("Total time: %ss", (simResult.getSimDuration() / 1000));
   }

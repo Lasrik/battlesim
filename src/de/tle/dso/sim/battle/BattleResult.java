@@ -1,6 +1,7 @@
 package de.tle.dso.sim.battle;
 
 import de.tle.dso.resources.ResourceCost;
+import de.tle.dso.units.Army;
 import de.tle.dso.units.Unit;
 import java.util.HashMap;
 import java.util.List;
@@ -8,15 +9,15 @@ import java.util.Map;
 
 public class BattleResult {
 
-  protected Map<Class<? extends Unit>, Integer> playerLosses;
-  protected Map<Class<? extends Unit>, Integer> computerLosses;
+  protected Army playerLosses;
+  protected Army computerLosses;
   protected boolean battleWon = false;
   protected long battleDuration;
   protected ResourceCost resourceCosts;
 
   public BattleResult() {
-    this.playerLosses = new HashMap<Class<? extends Unit>, Integer>();
-    this.computerLosses = new HashMap<Class<? extends Unit>, Integer>();
+    this.playerLosses = new Army();
+    this.computerLosses = new Army();
     this.resourceCosts = ResourceCost.buildEmpty();
   }
 
@@ -28,21 +29,21 @@ public class BattleResult {
     this.battleWon = battleWon;
   }
 
-  public Map<Class<? extends Unit>, Integer> getComputerLosses() {
+  public Army getComputerLosses() {
     return computerLosses;
   }
 
-  public Map<Class<? extends Unit>, Integer> getPlayerLosses() {
+  public Army getPlayerLosses() {
     return playerLosses;
   }
 
   public void addDeadPlayerUnit(Unit deadUnit) {
-    incCount(deadUnit, playerLosses);
+    playerLosses.add(deadUnit);
     resourceCosts.add(deadUnit.getResourceCost());
   }
 
   public void addDeadComputerUnit(Unit deadUnit) {
-    incCount(deadUnit, computerLosses);
+    computerLosses.add(deadUnit);
   }
 
   public void addDeadPlayerUnits(List<Unit> deadUnits) {
@@ -69,12 +70,12 @@ public class BattleResult {
     return resourceCosts;
   }
 
-  private void incCount(Unit deadUnit, Map<Class<? extends Unit>, Integer> map) {
-    int currentCount = 1;
-    if (map.containsKey(deadUnit.getClass())) {
-      currentCount = map.get(deadUnit.getClass());
-      currentCount++;
-    }
-    map.put(deadUnit.getClass(), currentCount);
-  }
+//  private void incCount(Unit deadUnit, Map<Class<? extends Unit>, Integer> map) {
+//    int currentCount = 1;
+//    if (map.containsKey(deadUnit.getClass())) {
+//      currentCount = map.get(deadUnit.getClass());
+//      currentCount++;
+//    }
+//    map.put(deadUnit.getClass(), currentCount);
+//  }
 }

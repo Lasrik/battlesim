@@ -95,8 +95,8 @@ public class BattleTest {
     assertFalse(result.isBattleWon());
     assertEquals("10 R, 10 M, 10 C, 10 S, 10 E, 10 B, 10 LB, 10 A, 10 K, 1 G", toPattern(result.getPlayerLosses()));
 
-    assertEquals(5, getLossesFor(Wachhund.class, result));
-    assertBetween(2, 5, getLossesFor(Steinwerfer.class, result));
+    assertEquals(5, getLossesFor("WH", result));
+    assertBetween(2, 5, getLossesFor("SW", result));
   }
 
   @Test
@@ -114,8 +114,8 @@ public class BattleTest {
 
     assertNotNull(result);
 
-    assertEquals(30, getLossesFor(Wachhund.class, result));
-    assertBetween(0, 3, getLossesFor(Waldläufer.class, result));
+    assertEquals(30, getLossesFor("WH", result));
+    assertBetween(0, 3, getLossesFor("WL", result));
   }
 
   @Test
@@ -135,7 +135,7 @@ public class BattleTest {
     assertTrue(result.isBattleWon());
 
     assertEquals("30 WH, 160 RB, 10 WL", toPattern(result.computerLosses));
-    assertBetween(92, 102, getLossesFor(Elitesoldat.class, result));
+    assertBetween(92, 102, getLossesFor("E", result));
   }
 
   private void testBattle(String attackerArmyPattern, String defenderArmyPattern, String attackerResultPattern, String defenderResultPattern, boolean win) {
@@ -163,20 +163,18 @@ public class BattleTest {
     assertEquals(win, result.isBattleWon());
   }
 
-  protected String toPattern(Map<Class<? extends Unit>, Integer> army) {
-    return UnitPatternHelper.createPatternFromMap(army);
+  protected String toPattern(Army army) {
+    return UnitPatternHelper.createPatternFromArmy(army);
   }
 
-  protected int getLossesFor(Class<? extends Unit> unit, BattleResult result) {
-    if (result.getComputerLosses().containsKey(unit)) {
-      return result.getComputerLosses().get(unit);
+  protected int getLossesFor(String unit, BattleResult result) {
+    int count = 0;
+
+    if (result.getComputerLosses().getNumberOf(unit) == 0) {
+      return result.getPlayerLosses().getNumberOf(unit);
     }
 
-    if (result.getPlayerLosses().containsKey(unit)) {
-      return result.getPlayerLosses().get(unit);
-    }
-
-    return 0;
+    return count;
   }
 
   protected void assertBetween(int min, int max, int actualValue) {

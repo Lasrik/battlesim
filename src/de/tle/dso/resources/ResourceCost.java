@@ -58,6 +58,33 @@ public class ResourceCost implements Comparable<ResourceCost> {
     return this.totalWeightPoints() - o.totalWeightPoints();
   }
 
+  public boolean greaterThan(ResourceCost other) {
+    return this.compareTo(other) > 0;
+  }
+
+  public boolean lesserThan(ResourceCost other) {
+    return this.compareTo(other) < 0;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final ResourceCost other = (ResourceCost) obj;
+    return this.compareTo(other) == 0;
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 3;
+    hash = 59 * hash + this.totalWeightPoints();
+    return hash;
+  }
+
   @Override
   public String toString() {
     if (this == NONE) {
