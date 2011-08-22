@@ -66,6 +66,10 @@ public class SimulationResult {
     return maxResourceCosts;
   }
 
+  public boolean isAlwaysWin() {
+    return alwaysWin;
+  }
+
   private void trackResourceCosts(BattleResult battleResult) {
     if (maxResourceCosts.lesserThan(battleResult.getResourceCosts())) {
       maxResourceCosts = battleResult.getResourceCosts();
