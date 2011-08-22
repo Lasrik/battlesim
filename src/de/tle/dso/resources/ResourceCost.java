@@ -66,6 +66,10 @@ public class ResourceCost implements Comparable<ResourceCost> {
     return this.compareTo(other) < 0;
   }
 
+  public int get(Resource res) {
+    return usedResources.get(res);
+  }
+
   @Override
   public boolean equals(Object obj) {
     if (obj == null) {

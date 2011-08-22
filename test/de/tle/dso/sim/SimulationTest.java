@@ -1,8 +1,5 @@
 package de.tle.dso.sim;
 
-import de.tle.dso.units.computer.boss.Waltraud;
-import de.tle.dso.units.player.Elitesoldat;
-import de.tle.dso.units.player.Soldat;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -22,8 +19,8 @@ public class SimulationTest {
 
     assertEquals(Simulation.MAX_RUNS, simResult.getNumberOfSimulationRuns());
 
-    assertTrue(91 <= simResult.getMinPlayerLosses().get(Elitesoldat.class));
-    assertTrue(104 >= simResult.getMaxPlayerLosses().get(Elitesoldat.class));
+    assertTrue(91 <= simResult.getMinPlayerLosses().getNumberOf("E"));
+    assertTrue(104 >= simResult.getMaxPlayerLosses().getNumberOf("E"));
   }
 
   @Test
@@ -35,8 +32,8 @@ public class SimulationTest {
 
     assertEquals(Simulation.MAX_RUNS, simResult.getNumberOfSimulationRuns());
 
-    assertTrue(115 <= simResult.getMinPlayerLosses().get(Soldat.class));
-    assertTrue(128 >= simResult.getMaxPlayerLosses().get(Soldat.class));
+    assertTrue(115 <= simResult.getMinPlayerLosses().getNumberOf("S"));
+    assertTrue(128 >= simResult.getMaxPlayerLosses().getNumberOf("S"));
   }
 
   @Test
@@ -48,7 +45,7 @@ public class SimulationTest {
 
     assertEquals(Simulation.MAX_RUNS, simResult.getNumberOfSimulationRuns());
 
-    assertEquals(1, (int) simResult.getMinComputerLosses().get(Waltraud.class));
-    assertEquals(1, (int) simResult.getMaxComputerLosses().get(Waltraud.class));
+    assertEquals(1, (int) simResult.getMinComputerLosses().getNumberOf("DWW"));
+    assertEquals(1, (int) simResult.getMaxComputerLosses().getNumberOf("DWW"));
   }
 }

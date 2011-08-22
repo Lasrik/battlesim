@@ -3,50 +3,25 @@ package de.tle.dso.sim;
 import de.tle.dso.resources.ResourceCost;
 import de.tle.dso.sim.battle.BattleResult;
 import de.tle.dso.units.Army;
-import de.tle.dso.units.Unit;
-import java.util.HashMap;
-import java.util.Map;
 
 public class SimulationResult {
 
-  protected Army minPlayerLosses;
-  protected Army maxPlayerLosses;
-  protected Army minComputerLosses;
-  protected Army maxComputerLosses;
+  protected Army minPlayerLosses = null;
+  protected Army maxPlayerLosses = null;
+  protected Army minComputerLosses = null;
+  protected Army maxComputerLosses = null;
   protected ResourceCost maxResourceCosts = ResourceCost.buildEmpty();
-  protected int numberOfSimulationRuns;
-  protected long simDuration;
+  protected int numberOfSimulationRuns = 0;
+  protected long simDuration = 0;
   protected boolean alwaysWin = true;
 
   public SimulationResult() {
-    this.minComputerLosses = new Army();
-    this.maxComputerLosses = new Army();
-
-    this.minPlayerLosses = new Army();
-    this.maxPlayerLosses = new Army();
-
-    this.numberOfSimulationRuns = 0;
   }
 
   public void addBattleResult(BattleResult battleResult) {
-    if (maxResourceCosts.lesserThan(battleResult.getResourceCosts())) {
-      maxResourceCosts = battleResult.getResourceCosts();
-    }
-
-    Army currentPlayerLosses = battleResult.getPlayerLosses();
-    Army currentComputerLosses = battleResult.getComputerLosses();
-
-    if (currentPlayerLosses.size() > maxPlayerLosses.size()) {
-      maxPlayerLosses = currentPlayerLosses;
-    } else if (currentPlayerLosses.size() < minPlayerLosses.size()) {
-      minPlayerLosses = currentPlayerLosses;
-    }
-
-    if (currentComputerLosses.size() > maxComputerLosses.size()) {
-      maxComputerLosses = currentComputerLosses;
-    } else if (currentComputerLosses.size() < minComputerLosses.size()) {
-      minComputerLosses = currentComputerLosses;
-    }
+    trackResourceCosts(battleResult);
+    trackPlayerLosses(battleResult);
+    trackComputerLosses(battleResult);
 
     if (battleResult.isBattleWon() == false) {
       alwaysWin = false;
@@ -89,5 +64,38 @@ public class SimulationResult {
 
   public ResourceCost getMaxResourceCosts() {
     return maxResourceCosts;
+  }
+
+  private void trackResourceCosts(BattleResult battleResult) {
+    if (maxResourceCosts.lesserThan(battleResult.getResourceCosts())) {
+      maxResourceCosts = battleResult.getResourceCosts();
+    }
+  }
+
+  private void trackComputerLosses(BattleResult battleResult) {
+    Army currentComputerLosses = battleResult.getComputerLosses();
+    if (notSet(maxComputerLosses) || currentComputerLosses.size() > maxComputerLosses.size()) {
+      maxComputerLosses = currentComputerLosses;
+    }
+
+    if (notSet(minComputerLosses) || currentComputerLosses.size() < minComputerLosses.size()) {
+      minComputerLosses = currentComputerLosses;
+    }
+  }
+
+  private void trackPlayerLosses(BattleResult battleResult) {
+    Army currentPlayerLosses = battleResult.getPlayerLosses();
+
+    if (notSet(maxPlayerLosses) || currentPlayerLosses.size() > maxPlayerLosses.size()) {
+      maxPlayerLosses = currentPlayerLosses;
+    }
+
+    if (notSet(minPlayerLosses) || currentPlayerLosses.size() < minPlayerLosses.size()) {
+      minPlayerLosses = currentPlayerLosses;
+    }
+  }
+
+  private boolean notSet(Object o) {
+    return o == null;
   }
 }

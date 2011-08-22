@@ -26,11 +26,10 @@ public class SimulationResultTest {
 
     simResult.addBattleResult(battleResult);
 
-    assertTrue(simResult.getMinPlayerLosses().containsKey(Rekrut.class));
-    assertTrue(simResult.getMaxPlayerLosses().containsKey(Rekrut.class));
+    assertEquals(1, simResult.getNumberOfSimulationRuns());
 
-    assertEquals(2, (int) simResult.getMinPlayerLosses().get(Rekrut.class));
-    assertEquals(2, (int) simResult.getMaxPlayerLosses().get(Rekrut.class));
+    assertEquals(2, (int) simResult.getMinPlayerLosses().getNumberOf("R"));
+    assertEquals(2, (int) simResult.getMaxPlayerLosses().getNumberOf("R"));
   }
 
   @Test
@@ -40,9 +39,9 @@ public class SimulationResultTest {
 
     assertEquals(1, simResult.getNumberOfSimulationRuns());
 
-    assertEquals(2, (int) simResult.getMinPlayerLosses().get(Rekrut.class));
-    assertEquals(1, (int) simResult.getMinPlayerLosses().get(Bogenschütze.class));
-    assertEquals(1, (int) simResult.getMinPlayerLosses().get(Reiterei.class));
+    assertEquals(2, (int) simResult.getMinPlayerLosses().getNumberOf("R"));
+    assertEquals(1, (int) simResult.getMinPlayerLosses().getNumberOf("B"));
+    assertEquals(1, (int) simResult.getMinPlayerLosses().getNumberOf("C"));
   }
 
   @Test
@@ -54,33 +53,34 @@ public class SimulationResultTest {
 
     assertEquals(2, simResult.getNumberOfSimulationRuns());
 
-    assertEquals(2, (int) simResult.getMinPlayerLosses().get(Rekrut.class));
-    assertEquals(1, (int) simResult.getMinPlayerLosses().get(Bogenschütze.class));
-    assertEquals(1, (int) simResult.getMinPlayerLosses().get(Reiterei.class));
+    assertEquals(2, (int) simResult.getMinPlayerLosses().getNumberOf("R"));
+    assertEquals(1, (int) simResult.getMinPlayerLosses().getNumberOf("B"));
+    assertEquals(1, (int) simResult.getMinPlayerLosses().getNumberOf("C"));
 
-    assertEquals(2, (int) simResult.getMaxPlayerLosses().get(Rekrut.class));
-    assertEquals(1, (int) simResult.getMaxPlayerLosses().get(Bogenschütze.class));
-    assertEquals(1, (int) simResult.getMaxPlayerLosses().get(Reiterei.class));
+    assertEquals(2, (int) simResult.getMaxPlayerLosses().getNumberOf("R"));
+    assertEquals(1, (int) simResult.getMaxPlayerLosses().getNumberOf("B"));
+    assertEquals(1, (int) simResult.getMaxPlayerLosses().getNumberOf("C"));
   }
 
   @Test
   public void testAddBattleResult3() {
-    BattleResult battleResult = battleResultFromPattern("2 R, 5 B, 1C");
-    BattleResult battleResult2 = battleResultFromPattern("10 R, 1 B, 1C");
-    BattleResult battleResult3 = battleResultFromPattern("7 R, 2 B, 1C");
-    simResult.addBattleResult(battleResult);
-    simResult.addBattleResult(battleResult2);
-    simResult.addBattleResult(battleResult3);
+    BattleResult avgResult = battleResultFromPattern("7 R, 2 B, 1C");
+    BattleResult worstResult = battleResultFromPattern("10 R, 1 B, 1C");
+    BattleResult bestResult = battleResultFromPattern("2 R, 5 B, 1C");
+    simResult.addBattleResult(avgResult);
+    simResult.addBattleResult(worstResult);
+    simResult.addBattleResult(bestResult);
 
-    assertEquals(2, (int) simResult.getMinPlayerLosses().get(Rekrut.class));
-    assertEquals(10, (int) simResult.getMaxPlayerLosses().get(Rekrut.class));
+    assertEquals(2, (int) simResult.getMinPlayerLosses().getNumberOf("R"));
+    assertEquals(10, (int) simResult.getMaxPlayerLosses().getNumberOf("R"));
 
-    assertEquals(1, (int) simResult.getMinPlayerLosses().get(Bogenschütze.class));
-    assertEquals(5, (int) simResult.getMaxPlayerLosses().get(Bogenschütze.class));
+    assertEquals(5, (int) simResult.getMinPlayerLosses().getNumberOf("B"));
+    assertEquals(1, (int) simResult.getMaxPlayerLosses().getNumberOf("B"));
 
-    assertEquals(1, (int) simResult.getMinPlayerLosses().get(Reiterei.class));
-    assertEquals(1, (int) simResult.getMaxPlayerLosses().get(Reiterei.class));
+    assertEquals(1, (int) simResult.getMinPlayerLosses().getNumberOf("C"));
+    assertEquals(1, (int) simResult.getMaxPlayerLosses().getNumberOf("C"));
 
+    assertEquals(3, simResult.getNumberOfSimulationRuns());
   }
 
   private BattleResult battleResultFromPattern(String pattern) {

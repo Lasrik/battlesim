@@ -1,5 +1,6 @@
 package de.tle.dso.sim.battle;
 
+import de.tle.dso.resources.Resource;
 import de.tle.dso.units.Unit;
 import de.tle.dso.units.computer.Plünderer;
 import de.tle.dso.units.computer.boss.Bert;
@@ -30,8 +31,8 @@ public class BattleResultTest {
   public void testAddDeadPlayerUnit() {
     result.addDeadPlayerUnit(new Rekrut());
     assertNotNull(result.getPlayerLosses());
-    assertEquals(1, (int) result.getPlayerLosses().get(Rekrut.class));
-    assertEquals(null, result.getPlayerLosses().get(Plünderer.class));
+    assertEquals(1, (int) result.getPlayerLosses().getNumberOf("R"));
+    assertEquals(0, (int) result.getPlayerLosses().getNumberOf("PL"));
   }
 
   @Test
@@ -45,7 +46,24 @@ public class BattleResultTest {
 
     result.addDeadComputerUnits(units);
 
-    assertEquals(3, (int) result.getComputerLosses().get(Rekrut.class));
-    assertEquals(1, (int) result.getComputerLosses().get(Bert.class));
+    assertEquals(3, (int) result.getComputerLosses().getNumberOf("R"));
+    assertEquals(1, (int) result.getComputerLosses().getNumberOf("EB"));
+  }
+
+  @Test
+  public void testResourceCost() {
+    List<Unit> units = new LinkedList<Unit>();
+    units.add(new Rekrut());
+    units.add(new Rekrut());
+    units.add(new Rekrut());
+    units.add(new Bert());
+    units.add(new Reiterei());
+
+    result.addDeadPlayerUnits(units);
+
+    int expectedTotalPoints = new Rekrut().getResourceCost().totalWeightPoints() * 3 + new Reiterei().getResourceCost().totalWeightPoints();
+
+    assertEquals(expectedTotalPoints, result.getResourceCosts().totalWeightPoints());
+    assertEquals(40, result.getResourceCosts().get(Resource.HORSE));
   }
 }
