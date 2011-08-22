@@ -83,6 +83,20 @@ public class SimulationResultTest {
     assertEquals(3, simResult.getNumberOfSimulationRuns());
   }
 
+  @Test
+  public void testResourceCost() {
+    BattleResult avgResult = battleResultFromPattern("7 R, 2 B, 1C");
+    BattleResult worstResult = battleResultFromPattern("10 R, 1 B, 1C");
+    BattleResult bestResult = battleResultFromPattern("2 R, 5 B, 1C");
+    simResult.addBattleResult(avgResult);
+    simResult.addBattleResult(worstResult);
+    simResult.addBattleResult(bestResult);
+
+    int expectedCost = worstResult.getResourceCosts().totalWeightPoints();
+
+    assertEquals(expectedCost, simResult.getMaxResourceCosts().totalWeightPoints());
+  }
+
   private BattleResult battleResultFromPattern(String pattern) {
     BattleResult battleResult = new BattleResult();
     battleResult.addDeadPlayerUnits(listFromPattern(pattern));
