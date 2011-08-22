@@ -1,10 +1,17 @@
 package de.tle.dso.sim;
 
+import org.apache.log4j.Logger;
+import org.junit.BeforeClass;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class SimulationTest {
+
+  @BeforeClass
+  public static void BeforeClass() {
+    Logger.getRootLogger().removeAllAppenders();
+  }
 
   @Before
   public void setUp() {
@@ -32,8 +39,8 @@ public class SimulationTest {
 
     assertEquals(Simulation.MAX_RUNS, simResult.getNumberOfSimulationRuns());
 
-    assertTrue(115 <= simResult.getMinPlayerLosses().getNumberOf("S"));
-    assertTrue(128 >= simResult.getMaxPlayerLosses().getNumberOf("S"));
+    assertTrue(114 < simResult.getMinPlayerLosses().getNumberOf("S"));
+    assertTrue(128 > simResult.getMaxPlayerLosses().getNumberOf("S"));
   }
 
   @Test

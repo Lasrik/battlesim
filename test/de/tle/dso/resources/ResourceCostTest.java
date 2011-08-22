@@ -46,6 +46,7 @@ public class ResourceCostTest {
     ResourceCost noCosts = ResourceCost.NONE;
     ResourceCost otherCosts = ResourceCost.build(BEER, 1, SETTLER, 1, BRONCE_SWORD, 1);
     assertTrue(noCosts.compareTo(otherCosts) < 0);
+    assertTrue(noCosts.lesserThan(otherCosts));
   }
 
   @Test
@@ -57,5 +58,19 @@ public class ResourceCostTest {
     assertTrue(cost1.compareTo(cost2) < 0);
     assertTrue(cost2.compareTo(cost1) > 0);
     assertTrue(cost1.compareTo(cost3) == 0);
+  }
+
+  @Test
+  public void testLesserGreaterThan() {
+    ResourceCost cost1 = ResourceCost.build(SETTLER, 1, BEER, 1, BRONCE_SWORD, 1);
+    ResourceCost cost2 = ResourceCost.build(SETTLER, 1, BEER, 1, BRONCE_SWORD, 2);
+    ResourceCost cost3 = ResourceCost.build(SETTLER, 1, BEER, 1, BRONCE_SWORD, 1);
+
+    assertTrue(cost1.lesserThan(cost2));
+    assertTrue(cost2.greaterThan(cost1));
+    assertTrue(cost1.equals(cost3));
+
+    assertFalse(cost1.lesserThan(cost3));
+    assertFalse(cost1.greaterThan(cost3));
   }
 }

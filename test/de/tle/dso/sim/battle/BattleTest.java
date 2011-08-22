@@ -1,14 +1,10 @@
 package de.tle.dso.sim.battle;
 
-import java.util.Map;
-import de.tle.dso.units.Unit;
 import de.tle.dso.units.util.UnitPatternHelper;
 import de.tle.dso.units.Army;
-import de.tle.dso.units.computer.Steinwerfer;
-import de.tle.dso.units.computer.Wachhund;
-import de.tle.dso.units.computer.Waldläufer;
-import de.tle.dso.units.player.Elitesoldat;
+import org.apache.log4j.Logger;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -17,6 +13,11 @@ public class BattleTest {
 
   private Army playerArmy;
   private Army computerArmy;
+
+  @BeforeClass
+  public static void BeforeClass() {
+    Logger.getRootLogger().removeAllAppenders();
+  }
 
   @Before
   public void setUp() {
@@ -168,9 +169,9 @@ public class BattleTest {
   }
 
   protected int getLossesFor(String unit, BattleResult result) {
-    int count = 0;
+    int count = result.getComputerLosses().getNumberOf(unit);
 
-    if (result.getComputerLosses().getNumberOf(unit) == 0) {
+    if (count == 0) {
       return result.getPlayerLosses().getNumberOf(unit);
     }
 
