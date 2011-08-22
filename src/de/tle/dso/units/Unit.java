@@ -15,7 +15,7 @@ public abstract class Unit {
   protected SpecialDefense specialDefense = SpecialDefense.NONE;
   protected ResourceCost resourceCost = ResourceCost.NONE;
   protected Initiative initiative = Initiative.MEDIUM;
-  private static Random rand = new Random(System.currentTimeMillis());
+  private static Random rand = new Random();
 
   public abstract String getName();
 
