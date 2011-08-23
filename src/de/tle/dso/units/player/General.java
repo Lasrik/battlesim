@@ -4,7 +4,7 @@ import de.tle.dso.units.Initiative;
 import de.tle.dso.units.SpecialDefense;
 import de.tle.dso.units.Unit;
 
-public class General extends PlayerUnit {
+public class General extends Unit {
 
   protected static String name = "General";
 
