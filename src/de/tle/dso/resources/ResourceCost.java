@@ -44,6 +44,7 @@ public class ResourceCost implements Comparable<ResourceCost> {
     if (this == NONE) {
       throw new UnsupportedOperationException("Cannot add resources to NONE.");
     }
+    
     for (Resource res : anotherCost.resources.keySet()) {
       int count = anotherCost.resources.get(res);
       if (this.resources.containsKey(res)) {
