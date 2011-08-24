@@ -1,9 +1,14 @@
 package de.tle.simulation;
 
+import de.tle.dso.sim.Simulation;
+import de.tle.dso.sim.SimulationResult;
+import de.tle.dso.sim.battle.InvalidArmyException;
+import de.tle.dso.units.util.UnitPatternHelper;
+
 public class Individual implements Comparable<Individual> {
 
   public final static int MAX = 200;
-  public final static int GENOME_SIZE = 9;
+  public final static int GENOME_SIZE = 7;
   protected int[] genom;
   private int fitness = 0;
 
@@ -16,7 +21,21 @@ public class Individual implements Comparable<Individual> {
   }
 
   public Individual mate(Individual other) {
-    return this;
+    int[] newGenome = new int[GENOME_SIZE];
+
+    int random = getRandomAllele();
+    System.arraycopy(this.genom, 0, newGenome, 0, random);
+    System.arraycopy(other.genom, random, newGenome, random, newGenome.length - random);
+
+    Individual child = new Individual(newGenome);
+    while (child.crossSum() > 200) {
+      child.reduceRandomAllele();
+    }
+    while (child.crossSum() < 1) {
+      child.increaseRandomAllele();
+    }
+
+    return child;
   }
 
   public int[] getGenom() {
@@ -28,7 +47,17 @@ public class Individual implements Comparable<Individual> {
   }
 
   public void calculateFitness() {
-    fitness = crossSum();
+    Simulation sim = new Simulation(UnitPatternHelper.createPatternFromArray(genom), EvolutionSimulation.TARGET_PATTERN);
+    try {
+      SimulationResult simResult = sim.simulate();
+      fitness = simResult.getMaxResourceCosts().totalWeightPoints();
+      fitness += crossSum();
+      if (!simResult.isAlwaysWin()) {
+        fitness += 1000000;
+      }
+    } catch (InvalidArmyException ex) {
+      throw new RuntimeException(ex.getMessage());
+    }
   }
 
   public int getFitness() {
@@ -66,11 +95,7 @@ public class Individual implements Comparable<Individual> {
     sb.append("{ -");
     sb.append(fitness);
     sb.append("- [");
-    for (int i = 0; i < this.genom.length; i++) {
-      sb.append(genom[i]);
-      sb.append(", ");
-    }
-    sb.delete(sb.length() - 2, sb.length());
+    sb.append(UnitPatternHelper.createPatternFromArray(genom));
     sb.append("]} ");
     return sb.toString();
   }

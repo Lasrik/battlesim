@@ -122,6 +122,50 @@ public class UnitPatternHelper {
     return result.toString();
   }
 
+  public static String createPatternFromArray(int[] array) {
+    StringBuilder sb = new StringBuilder();
+    for (int i = 0; i < array.length; i++) {
+      if (array[i] > 0) {
+        sb.append(array[i]);
+        sb.append(" ");
+
+        switch (i) {
+          case 0:
+            sb.append("R");
+            break;
+          case 1:
+            sb.append("M");
+            break;
+          case 2:
+            sb.append("C");
+            break;
+          case 3:
+            sb.append("S");
+            break;
+          case 4:
+            sb.append("E");
+            break;
+          case 5:
+            sb.append("B");
+            break;
+          case 6:
+            sb.append("LB");
+            break;
+          case 7:
+            sb.append("A");
+            break;
+          case 8:
+            sb.append("K");
+            break;
+        }
+        sb.append(", ");
+      }
+    }
+
+    sb.append("1 G");
+    return sb.toString();
+  }
+
   private UnitPatternHelper(String pattern) {
     this.originalInputString = pattern.toUpperCase();
     splitPattern();

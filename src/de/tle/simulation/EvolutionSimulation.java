@@ -1,5 +1,6 @@
 package de.tle.simulation;
 
+import com.spinn3r.log5j.LogManager;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -12,53 +13,57 @@ public class EvolutionSimulation {
   http://de.wikipedia.org/wiki/Evolutionsstrategie#Arten
    */
 
-  public final static int PARENT_GEN_SIZE = 20;
+  public final static int PARENT_GEN_SIZE = 50;
   public final static int PARENTS_PER_CHILD = 2;
-  public final static int CHILD_GEN_SIZE = 5;
-  protected final String targetPattern;
+  public final static int CHILD_GEN_SIZE = 10;
+  public final static String TARGET_PATTERN = "1 DWW";
   protected List<Individual> currentGeneration = new ArrayList<Individual>(PARENT_GEN_SIZE);
   protected List<Individual> selectedParents = new ArrayList<Individual>();
   protected List<Individual> children = new ArrayList<Individual>();
   private final static Logger LOG = Logger.getLogger(EvolutionSimulation.class);
+  private int generationsRun = 0;
+  private int bestFitnessSoFar = Integer.MAX_VALUE;
+  private int successiveRunsWithoutImprovement = 0;
 
-  public EvolutionSimulation(String targetPattern) {
-    this.targetPattern = targetPattern;
+  public EvolutionSimulation() {
   }
 
   public void evolve() {
     init();
     calculateFitness(currentGeneration);
+    logCurrentGeneration();
 
     do {
+      LOG.info("+++++++++++++++++++++++++++++++++++++++++++++++++++++");
+      LOG.info("Generation: " + generationsRun);
       selectParents();
       recombine();
       mutate();
       calculateFitness(children);
       logChildren();
       selectNextGeneration();
+      generationsRun++;
+      LOG.info("+++++++++++++++++++++++++++++++++++++++++++++++++++++");
     } while (terminationCriteriaNotMet());
   }
 
   public static void main(String[] args) {
-    LOG.info("Starting evlution...");
-    EvolutionSimulation sim = new EvolutionSimulation("");
+    LogManager.enableExplicitShutdown();
+    LOG.info("Starting evolution...");
+    EvolutionSimulation sim = new EvolutionSimulation();
     sim.evolve();
     LOG.info("Done.");
+    LogManager.shutdown();
   }
 
   private void init() {
     for (int i = 0; i < PARENT_GEN_SIZE; i++) {
       currentGeneration.add(Individual.createRandom());
     }
-
-    logCurrentGeneration();
   }
 
   private void selectParents() {
-    selectedParents = new ArrayList<Individual>(CHILD_GEN_SIZE * PARENTS_PER_CHILD);
-    for (int i = 0; i < CHILD_GEN_SIZE * PARENTS_PER_CHILD; i++) {
-      selectedParents.add(currentGeneration.get(nextRandom(currentGeneration.size())));
-    }
+    selectedParents = new ArrayList<Individual>(currentGeneration.subList(0, CHILD_GEN_SIZE * PARENTS_PER_CHILD));
 
     logSelectedParents();
   }
@@ -77,7 +82,7 @@ public class EvolutionSimulation {
 
   private void mutate() {
     for (Individual child : children) {
-      if (nextRandom(100) < 10) {
+      if (nextRandom(100) < 60) {
         int operation = nextRandom(10);
         switch (operation) {
           case 0:
@@ -116,8 +121,20 @@ public class EvolutionSimulation {
     logCurrentGeneration();
   }
 
+  private boolean terminationCriteriaMet() {
+    Individual currentBestCandidate = currentGeneration.get(0);
+    if (bestFitnessSoFar > currentBestCandidate.getFitness()) {
+      bestFitnessSoFar = currentBestCandidate.getFitness();
+      successiveRunsWithoutImprovement = 0;
+    } else {
+      successiveRunsWithoutImprovement++;
+    }
+
+    return successiveRunsWithoutImprovement > 10 || generationsRun > 10000;
+  }
+
   private boolean terminationCriteriaNotMet() {
-    return false;
+    return !terminationCriteriaMet();
   }
 
   private int nextRandom(int ceiling) {
@@ -136,7 +153,7 @@ public class EvolutionSimulation {
     sb.append("Parents: ");
     appendIndividuals(sb, selectedParents);
 
-    LOG.info(sb.toString());
+    LOG.debug(sb.toString());
   }
 
   private void appendIndividuals(StringBuilder sb, List<Individual> list) {
@@ -150,6 +167,6 @@ public class EvolutionSimulation {
     sb.append("Children: ");
     appendIndividuals(sb, children);
 
-    LOG.info(sb.toString());
+    LOG.debug(sb.toString());
   }
 }
