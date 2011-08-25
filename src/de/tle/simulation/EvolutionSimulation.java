@@ -5,9 +5,7 @@ import de.tle.dso.sim.DSOFitnessSimulationFunction;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 import org.apache.log4j.Logger;
-import static java.lang.Math.*;
 
 public class EvolutionSimulation {
   /*
@@ -22,14 +20,10 @@ public class EvolutionSimulation {
   public final static String TARGET_PATTERN = "1 DWW";
   protected List<Individual> currentGeneration = new ArrayList<Individual>(PARENT_GEN_SIZE);
   protected List<Individual> children = new ArrayList<Individual>();
-  protected final Random rand = new Random();
   private final static Logger LOG = Logger.getLogger(EvolutionSimulation.class);
   private int generationsRun = 0;
   private int bestFitnessSoFar = Integer.MAX_VALUE;
   private int successiveRunsWithoutImprovement = 0;
-
-  public EvolutionSimulation() {
-  }
 
   public void evolve() {
     init();

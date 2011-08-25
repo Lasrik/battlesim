@@ -8,7 +8,8 @@ import de.tle.simulation.Individual;
 
 public class DSOFitnessSimulationFunction implements FitnessFunction {
 
-  public final static int LOOSE_PENALTY = 100000;
+  public final static int LOOSE_PENALTY = 1000000;
+  public final static int INVALID_GENOM_PENALTY = 10000000;
 
   @Override
   public void evaluate(Individual individual) {
@@ -18,7 +19,7 @@ public class DSOFitnessSimulationFunction implements FitnessFunction {
       int fitness = calculateFitness(simResult);
       individual.setFitness(fitness);
     } catch (InvalidArmyException ex) {
-      throw new RuntimeException("InvalidArmy: " + individual, ex);
+      individual.setFitness(INVALID_GENOM_PENALTY);
     }
   }
 

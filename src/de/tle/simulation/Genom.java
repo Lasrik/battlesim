@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class Genom {
 
-  public final static int NUMBER_OF_CHROMOSOMES = 7;
+  public final static int NUMBER_OF_CHROMOSOMES = 9;
   public final static int MAX_CROSS_SUM = 200;
   public final static int MAX_SINGLE_VALUE = 200;
   private int[] chromosomes;
@@ -46,7 +46,6 @@ public class Genom {
     firstPartFromThisGenom(newChromosomes, randomPosition);
     secondPartFromOtherGenom(other, randomPosition, newChromosomes);
     Genom result = new Genom(newChromosomes);
-    result.makeValid();
 
     return result;
   }
@@ -92,7 +91,11 @@ public class Genom {
 
   public boolean isValid() {
     int crossSum = crossSum();
-    return (crossSum > 0 && crossSum < MAX_CROSS_SUM);
+    if ((crossSum > 0 && crossSum < MAX_CROSS_SUM)) {
+      return true;
+    }
+
+    return false;
   }
 
   @Override
@@ -152,16 +155,6 @@ public class Genom {
       result += chromosom;
     }
     return result;
-  }
-
-  private void makeValid() {
-    while (crossSum() > 200) {
-      reduceRandomChromosom();
-    }
-
-    while (crossSum() < 1) {
-      increaseRandomChromosom();
-    }
   }
 
   private void secondPartFromOtherGenom(Genom other, int randomPosition, int[] newChromosomes) {

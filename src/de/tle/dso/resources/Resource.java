@@ -9,9 +9,9 @@ public enum Resource {
   IRON_SWORD(5),
   STEEL_SWORD(8),
   LONG_BOW(4),
-  TITAN_SWORD(15),
-  CROSSBOW(10),
-  CANON(20);
+  TITAN_SWORD(25),
+  CROSSBOW(50),
+  CANON(100);
   final int weight;
 
   Resource(int weight) {
