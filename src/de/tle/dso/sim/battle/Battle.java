@@ -93,7 +93,7 @@ public class Battle {
 
   private void validatePlayerArmy() throws InvalidArmyException {
     if (attackingArmy == null || !attackingArmy.isValid()) {
-      throw new InvalidArmyException("Player Army is null");
+      throw new InvalidArmyException("Player Army is null or invalid");
     }
     if (!attackingArmy.containsGeneral()) {
       throw new InvalidArmyException("Player army must contain a General");
