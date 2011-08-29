@@ -2,7 +2,9 @@ package de.tle.dso.sim.battle;
 
 import de.tle.dso.units.util.UnitPatternHelper;
 import de.tle.dso.units.Army;
-import org.apache.log4j.Logger;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -16,7 +18,7 @@ public class BattleTest {
 
   @BeforeClass
   public static void BeforeClass() {
-    Logger.getRootLogger().removeAllAppenders();
+    Logger.getLogger("de.tle").setLevel(Level.OFF);
   }
 
   @Before

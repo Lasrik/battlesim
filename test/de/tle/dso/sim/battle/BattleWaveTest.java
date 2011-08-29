@@ -1,6 +1,5 @@
 package de.tle.dso.sim.battle;
 
-import org.apache.log4j.Logger;
 import org.junit.BeforeClass;
 import de.tle.dso.units.Army;
 import de.tle.dso.units.Initiative;
@@ -9,6 +8,8 @@ import de.tle.dso.units.computer.Plünderer;
 import de.tle.dso.units.player.Rekrut;
 import de.tle.dso.units.util.UnitPatternHelper;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -22,7 +23,7 @@ public class BattleWaveTest {
 
   @BeforeClass
   public static void BeforeClass() {
-    Logger.getRootLogger().removeAllAppenders();
+    Logger.getLogger("de.tle").setLevel(Level.OFF);
   }
 
   @Before
