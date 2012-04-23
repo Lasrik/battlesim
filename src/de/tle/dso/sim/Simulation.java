@@ -6,6 +6,8 @@ import de.tle.dso.units.Army;
 import de.tle.dso.units.util.UnitPatternHelper;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.jboss.weld.environment.se.Weld;
+import org.jboss.weld.environment.se.WeldContainer;
 
 public class Simulation {
 
@@ -45,6 +47,7 @@ public class Simulation {
   }
 
   public static void main(String[] args) throws InvalidArmyException {
+    WeldContainer weld = new Weld().initialize();
     LOG.info("Starting Simulation ....");
     Simulation sim = new Simulation("200 S, 1G", "160 RB, 10 WL, 30 WH");
     sim.simulate();
@@ -52,12 +55,12 @@ public class Simulation {
 
   private void logResults() {
     LOG.log(Level.INFO, "Done %s Runs", simResult.getNumberOfSimulationRuns());
-    LOG.log(Level.INFO, "Min Player losses: %s", UnitPatternHelper.createPatternFromArmy(simResult.getMinPlayerLosses()));
-    LOG.log(Level.INFO, "Max Player losses: %s", UnitPatternHelper.createPatternFromArmy(simResult.getMaxPlayerLosses()));
-    LOG.log(Level.INFO, "Min Computer losses: %s", UnitPatternHelper.createPatternFromArmy(simResult.getMinComputerLosses()));
-    LOG.log(Level.INFO, "Max Computer losses: %s", UnitPatternHelper.createPatternFromArmy(simResult.getMaxComputerLosses()));
-    LOG.log(Level.INFO, "Max resource cost: %s", simResult.getMaxResourceCosts());
-    LOG.log(Level.INFO, "Always win: %s", simResult.alwaysWin);
+    LOG.log(Level.INFO, "Min Player losses: %1s", UnitPatternHelper.createPatternFromArmy(simResult.getMinPlayerLosses()));
+    LOG.log(Level.INFO, "Max Player losses: %1s", UnitPatternHelper.createPatternFromArmy(simResult.getMaxPlayerLosses()));
+    LOG.log(Level.INFO, "Min Computer losses: %1s", UnitPatternHelper.createPatternFromArmy(simResult.getMinComputerLosses()));
+    LOG.log(Level.INFO, "Max Computer losses: %1s", UnitPatternHelper.createPatternFromArmy(simResult.getMaxComputerLosses()));
+    LOG.log(Level.INFO, "Max resource cost: %1s", simResult.getMaxResourceCosts());
+    LOG.log(Level.INFO, "Always win: %1s", simResult.alwaysWin);
     LOG.log(Level.INFO, "Battles simulated per second: %.2f/s", simResult.getBattlesPerSecond());
     LOG.log(Level.INFO, "Total time: %ss", (simResult.getSimDuration() / 1000));
   }

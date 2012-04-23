@@ -109,7 +109,7 @@ public class Battle {
     LOG.log(Level.INFO, "Verluste Spieler: %s", UnitPatternHelper.createPatternFromArmy(battleResult.playerLosses));
     LOG.log(Level.INFO, "Verluste Computer: %s", UnitPatternHelper.createPatternFromArmy(battleResult.computerLosses));
     LOG.log(Level.INFO, battleResult.battleWon ? "GEWONNEN" : "VERLOREN");
-    LOG.log(Level.INFO, "Resourcen: %s", battleResult.getResourceCosts());
+    LOG.log(Level.INFO, "Resourcen: %1s", battleResult.getResourceCosts());
     LOG.log(Level.INFO, "+++++++++++++++++++++++++++++++++++++++++++++++++");
   }
 }
