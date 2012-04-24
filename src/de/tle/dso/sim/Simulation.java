@@ -6,8 +6,6 @@ import de.tle.dso.units.Army;
 import de.tle.dso.units.util.UnitPatternHelper;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.jboss.weld.environment.se.Weld;
-import org.jboss.weld.environment.se.WeldContainer;
 
 public class Simulation {
 
@@ -47,7 +45,6 @@ public class Simulation {
   }
 
   public static void main(String[] args) throws InvalidArmyException {
-    WeldContainer weld = new Weld().initialize();
     LOG.info("Starting Simulation ....");
     Simulation sim = new Simulation("200 S, 1G", "160 RB, 10 WL, 30 WH");
     sim.simulate();
