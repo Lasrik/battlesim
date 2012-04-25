@@ -2,68 +2,38 @@ package de.tle.dso.units.util;
 
 import de.tle.dso.units.Army;
 import de.tle.dso.units.Unit;
-import de.tle.dso.units.computer.Plünderer;
-import de.tle.dso.units.computer.Raufbold;
-import de.tle.dso.units.computer.Schläger;
-import de.tle.dso.units.computer.Steinwerfer;
-import de.tle.dso.units.computer.Wachhund;
-import de.tle.dso.units.computer.Waldläufer;
-import de.tle.dso.units.computer.boss.Bert;
-import de.tle.dso.units.computer.boss.Chuck;
-import de.tle.dso.units.computer.boss.Metallgebiss;
-import de.tle.dso.units.computer.boss.Stinktier;
-import de.tle.dso.units.computer.boss.Waltraud;
-import de.tle.dso.units.player.Armbrustschütze;
-import de.tle.dso.units.player.Bogenschütze;
-import de.tle.dso.units.player.Elitesoldat;
-import de.tle.dso.units.player.General;
-import de.tle.dso.units.player.Kanonier;
-import de.tle.dso.units.player.Langbogenschütze;
-import de.tle.dso.units.player.Miliz;
-import de.tle.dso.units.player.Reiterei;
-import de.tle.dso.units.player.Rekrut;
-import de.tle.dso.units.player.Soldat;
 import de.tle.dso.units.sort.SortByPrioComparator;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Modifier;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.apache.log4j.Logger;
+import org.reflections.Reflections;
 
 public class UnitPatternHelper {
 
   public final static Map<String, Class<? extends Unit>> unitsByShortName = new HashMap<String, Class<? extends Unit>>();
+  private final static Reflections reflections = new Reflections("de.tle.dso");
 
   static {
-    // Player
-    unitsByShortName.put("R", Rekrut.class);
-    unitsByShortName.put("M", Miliz.class);
-    unitsByShortName.put("C", Reiterei.class);
-    unitsByShortName.put("S", Soldat.class);
-    unitsByShortName.put("E", Elitesoldat.class);
-    unitsByShortName.put("B", Bogenschütze.class);
-    unitsByShortName.put("LB", Langbogenschütze.class);
-    unitsByShortName.put("A", Armbrustschütze.class);
-    unitsByShortName.put("K", Kanonier.class);
-    unitsByShortName.put("G", General.class);
-
-    // Computer
-    unitsByShortName.put("PL", Plünderer.class);
-    unitsByShortName.put("SL", Schläger.class);
-    unitsByShortName.put("WH", Wachhund.class);
-    unitsByShortName.put("RB", Raufbold.class);
-    unitsByShortName.put("SW", Steinwerfer.class);
-    unitsByShortName.put("WL", Waldläufer.class);
-
-    // Bosses
-    unitsByShortName.put("ST", Stinktier.class);
-    unitsByShortName.put("CK", Chuck.class);
-    unitsByShortName.put("EB", Bert.class);
-    unitsByShortName.put("MG", Metallgebiss.class);
-    unitsByShortName.put("DWW", Waltraud.class);
+    Set<Class<? extends Unit>> subTypes = reflections.getSubTypesOf(Unit.class);
+    for (Class<? extends Unit> unitClass : subTypes) {
+      if (Modifier.isAbstract(unitClass.getModifiers())) {
+        continue;
+      }
+      try {
+        Unit unit = unitClass.newInstance();
+        unitsByShortName.put(unit.getShortName(), unitClass);
+      } catch (Exception ex) {
+        Logger.getLogger(UnitPatternHelper.class).info("Konnte Unit nicht instantiieren: ", ex);
+      }
+    }
   }
+
+  /*
+   * Armeen sind immer nach dem Muster <Anzahl> <Kürzel>, <Anzahl> <Kürzel>
+   * aufgebaut. Also z.b. 32 R, 15C für 32 Rekruten und 15 Reiterei
+   */
   private final Pattern syntaxPattern = Pattern.compile("\\s*(\\d+)\\s*([A-Z]+)");
   private String originalInputString;
   private String[] splitPatterns;
@@ -71,22 +41,6 @@ public class UnitPatternHelper {
   public static Army createArmyFromPattern(String inputString) {
     UnitPatternHelper helper = new UnitPatternHelper(inputString);
     return helper.createArmy();
-  }
-
-  public static String createPatternFromMap(Map<Class<? extends Unit>, Integer> map) {
-    StringBuilder result = new StringBuilder();
-    List<Unit> appearingUnitsSortedByPrio = makeSortedListOfUnits(map);
-    for (Unit unit : appearingUnitsSortedByPrio) {
-      int count = map.get(unit.getClass());
-      result.append(count);
-      result.append(" ");
-      result.append(unit.getShortName());
-      result.append(", ");
-    }
-    removeLastComma(result);
-
-
-    return result.toString();
   }
 
   public static String createPatternFromArmy(Army army) {
@@ -120,50 +74,6 @@ public class UnitPatternHelper {
     removeLastComma(result);
 
     return result.toString();
-  }
-
-  public static String createPatternFromArray(int[] array) {
-    StringBuilder sb = new StringBuilder();
-    for (int i = 0; i < array.length; i++) {
-      if (array[i] > 0) {
-        sb.append(array[i]);
-        sb.append(" ");
-
-        switch (i) {
-          case 0:
-            sb.append("R");
-            break;
-          case 1:
-            sb.append("M");
-            break;
-          case 2:
-            sb.append("C");
-            break;
-          case 3:
-            sb.append("S");
-            break;
-          case 4:
-            sb.append("E");
-            break;
-          case 5:
-            sb.append("B");
-            break;
-          case 6:
-            sb.append("LB");
-            break;
-          case 7:
-            sb.append("A");
-            break;
-          case 8:
-            sb.append("K");
-            break;
-        }
-        sb.append(", ");
-      }
-    }
-
-    sb.append("1 G");
-    return sb.toString();
   }
 
   private UnitPatternHelper(String pattern) {

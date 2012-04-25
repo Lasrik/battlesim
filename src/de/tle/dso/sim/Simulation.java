@@ -4,17 +4,16 @@ import de.tle.dso.sim.battle.Battle;
 import de.tle.dso.sim.battle.InvalidArmyException;
 import de.tle.dso.units.Army;
 import de.tle.dso.units.util.UnitPatternHelper;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
+
 
 public class Simulation {
-
-  public final static int MAX_RUNS = 50;
+ public final static int MAX_RUNS = 50;
   private String attackingArmyPattern;
   private String defendingArmyPattern;
   private int numberOfRounds;
   private SimulationResult simResult;
-  private final static Logger LOG = Logger.getLogger(Simulation.class.getName());
+  private final static Logger LOG = Logger.getLogger(Simulation.class);
 
   public Simulation(String attackingArmyPattern, String defendingArmyPattern) {
     this.attackingArmyPattern = attackingArmyPattern;
@@ -51,14 +50,14 @@ public class Simulation {
   }
 
   private void logResults() {
-    LOG.log(Level.INFO, "Done %s Runs", simResult.getNumberOfSimulationRuns());
-    LOG.log(Level.INFO, "Min Player losses: %1s", UnitPatternHelper.createPatternFromArmy(simResult.getMinPlayerLosses()));
-    LOG.log(Level.INFO, "Max Player losses: %1s", UnitPatternHelper.createPatternFromArmy(simResult.getMaxPlayerLosses()));
-    LOG.log(Level.INFO, "Min Computer losses: %1s", UnitPatternHelper.createPatternFromArmy(simResult.getMinComputerLosses()));
-    LOG.log(Level.INFO, "Max Computer losses: %1s", UnitPatternHelper.createPatternFromArmy(simResult.getMaxComputerLosses()));
-    LOG.log(Level.INFO, "Max resource cost: %1s", simResult.getMaxResourceCosts());
-    LOG.log(Level.INFO, "Always win: %1s", simResult.alwaysWin);
-    LOG.log(Level.INFO, "Battles simulated per second: %.2f/s", simResult.getBattlesPerSecond());
-    LOG.log(Level.INFO, "Total time: %ss", (simResult.getSimDuration() / 1000));
+    LOG.debug(String.format("Done %s Runs", simResult.getNumberOfSimulationRuns()));
+    LOG.debug(String.format("Min Player losses: %s", UnitPatternHelper.createPatternFromArmy(simResult.getMinPlayerLosses())));
+    LOG.debug(String.format("Max Player losses: %s", UnitPatternHelper.createPatternFromArmy(simResult.getMaxPlayerLosses())));
+    LOG.debug(String.format("Min Computer losses: %s", UnitPatternHelper.createPatternFromArmy(simResult.getMinComputerLosses())));
+    LOG.debug(String.format("Max Computer losses: %s", UnitPatternHelper.createPatternFromArmy(simResult.getMaxComputerLosses())));
+    LOG.debug(String.format("Max resource cost: %s", simResult.getMaxResourceCosts()));
+    LOG.debug(String.format("Always win: %s", simResult.alwaysWin));
+    LOG.debug(String.format("Battles simulated per second: %.2f/s", simResult.getBattlesPerSecond()));
+    LOG.debug(String.format("Total time: %dms", (simResult.getSimDuration())));
   }
 }

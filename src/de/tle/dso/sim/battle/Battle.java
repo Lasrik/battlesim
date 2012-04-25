@@ -5,15 +5,14 @@ import de.tle.dso.units.Initiative;
 import de.tle.dso.units.Unit;
 import de.tle.dso.units.util.UnitPatternHelper;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 
 public class Battle {
 
   protected Army attackingArmy;
   protected Army defendingArmy;
   protected BattleResult battleResult;
-  private final static Logger LOG = Logger.getLogger(Battle.class.getName());
+  private final static Logger LOG = Logger.getLogger(Battle.class);
 
   public Battle(Army attacker, Army defender) {
     this.attackingArmy = attacker;
@@ -31,14 +30,14 @@ public class Battle {
   }
 
   private void startBattle() {
-    LOG.log(Level.FINE, "Kampf beginnt.");
+    LOG.trace("Kampf beginnt.");
 
     int roundNumber = 0;
     while (!endBattle()) {
-      LOG.log(Level.FINE, "Runde %s", ++roundNumber);
+      LOG.trace(String.format("Runde %s", ++roundNumber));
 
       for (Initiative phase : Initiative.values()) {
-        LOG.log(Level.FINE, "Phase %s", new Object[]{phase});
+        LOG.trace(String.format("Phase %s", new Object[]{phase}));
 
         attackersWave(phase);
         defendersFightBack(phase);
@@ -47,7 +46,7 @@ public class Battle {
       }
     }
 
-    LOG.log(Level.FINE, "Kampf ende.");
+    LOG.trace("Kampf ende.");
   }
 
   private void defendersFightBack(Initiative phase) {
@@ -101,15 +100,15 @@ public class Battle {
   }
 
   private void logArmies() {
-    LOG.log(Level.INFO, "Angreifer: %s ---- Verteidiger: %s", new Object[]{attackingArmy.toString(), defendingArmy.toString()});
+    LOG.trace(String.format("Angreifer: %s ---- Verteidiger: %s", new Object[]{attackingArmy.toString(), defendingArmy.toString()}));
   }
 
   private void logBattleOutcome() {
-    LOG.log(Level.INFO, "+++++++++++++++++++++++++++++++++++++++++++++++++");
-    LOG.log(Level.INFO, "Verluste Spieler: %s", UnitPatternHelper.createPatternFromArmy(battleResult.playerLosses));
-    LOG.log(Level.INFO, "Verluste Computer: %s", UnitPatternHelper.createPatternFromArmy(battleResult.computerLosses));
-    LOG.log(Level.INFO, battleResult.battleWon ? "GEWONNEN" : "VERLOREN");
-    LOG.log(Level.INFO, "Resourcen: %1s", battleResult.getResourceCosts());
-    LOG.log(Level.INFO, "+++++++++++++++++++++++++++++++++++++++++++++++++");
+    LOG.debug("+++++++++++++++++++++++++++++++++++++++++++++++++");
+    LOG.debug(String.format("Verluste Spieler: %s", UnitPatternHelper.createPatternFromArmy(battleResult.playerLosses)));
+    LOG.debug(String.format("Verluste Computer: %s", UnitPatternHelper.createPatternFromArmy(battleResult.computerLosses)));
+    LOG.debug(battleResult.battleWon ? "GEWONNEN" : "VERLOREN");
+    LOG.debug(String.format("Resourcen: %1s", battleResult.getResourceCosts()));
+    LOG.debug("+++++++++++++++++++++++++++++++++++++++++++++++++");
   }
 }

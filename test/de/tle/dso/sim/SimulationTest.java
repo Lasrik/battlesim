@@ -1,7 +1,7 @@
 package de.tle.dso.sim;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.junit.BeforeClass;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,7 +11,7 @@ public class SimulationTest {
 
   @BeforeClass
   public static void BeforeClass() {
-    Logger.getLogger("de.tle").setLevel(Level.OFF);
+    Logger.getRootLogger().removeAllAppenders();
   }
 
   @Before

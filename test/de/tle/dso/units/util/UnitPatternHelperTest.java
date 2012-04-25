@@ -1,15 +1,9 @@
 package de.tle.dso.units.util;
 
-import de.tle.dso.units.player.Miliz;
-import de.tle.dso.units.util.UnitPatternHelper;
 import de.tle.dso.units.Army;
-import de.tle.dso.units.computer.Plünderer;
-import de.tle.dso.units.player.Elitesoldat;
-import de.tle.dso.units.player.General;
-import de.tle.dso.units.player.Rekrut;
-import de.tle.dso.units.player.Soldat;
-import org.junit.Test;
+import de.tle.dso.units.player.*;
 import static org.junit.Assert.*;
+import org.junit.Test;
 
 public class UnitPatternHelperTest {
 

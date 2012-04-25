@@ -8,13 +8,13 @@ import de.tle.dso.units.computer.Plünderer;
 import de.tle.dso.units.player.Rekrut;
 import de.tle.dso.units.util.UnitPatternHelper;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 import static de.tle.dso.units.Initiative.*;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 
 public class BattleWaveTest {
 
@@ -23,7 +23,7 @@ public class BattleWaveTest {
 
   @BeforeClass
   public static void BeforeClass() {
-    Logger.getLogger("de.tle").setLevel(Level.OFF);
+    Logger.getRootLogger().removeAllAppenders();
   }
 
   @Before

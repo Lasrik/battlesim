@@ -5,8 +5,8 @@ import de.tle.dso.units.Army;
 import de.tle.dso.units.Initiative;
 import de.tle.dso.units.Unit;
 import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 
 public class BattleWave {
 
@@ -17,7 +17,7 @@ public class BattleWave {
   private Iterator<Unit> defendersByHp;
   private Iterator<Unit> currentDefenseLine;
   private Unit currentDefender = null;
-  private final static Logger LOG = Logger.getLogger(BattleWave.class.getName());
+  private final static Logger LOG = Logger.getLogger(BattleWave.class);
 
   public BattleWave(Army attackingArmy, Army defendingArmy, Initiative phase) {
     this.attackingArmy = attackingArmy;
@@ -49,7 +49,7 @@ public class BattleWave {
 
   private void doSingleDamage(int damageDone, Unit attacker) {
     currentDefender.reduceHitpoints(damageDone);
-    LOG.log(Level.FINE, "%s verursacht %s Schaden an %s (%s HP)", new Object[]{attacker.getName(), damageDone, currentDefender.getName(), currentDefender.getCurrentHitPoints()});
+    LOG.log(Level.TRACE, String.format("%s verursacht %s Schaden an %s (%s HP)", new Object[]{attacker.getName(), damageDone, currentDefender.getName(), currentDefender.getCurrentHitPoints()}));
 
     if (currentDefender.isDead()) {
       currentDefender = null;
@@ -60,7 +60,7 @@ public class BattleWave {
     int damageToBeDone = overallDamage;
     do {
       int actualDamageDone = currentDefender.reduceHitpoints(overallDamage);
-      LOG.log(Level.FINE, "%s verursacht %s Schaden an %s (%s HP)", new Object[]{attacker.getName(), actualDamageDone, currentDefender.getName(), currentDefender.isDead() ? "0" : currentDefender.getCurrentHitPoints()});
+      LOG.log(Level.TRACE, String.format("%s verursacht %s Schaden an %s (%s HP)", new Object[]{attacker.getName(), actualDamageDone, currentDefender.getName(), currentDefender.isDead() ? "0" : currentDefender.getCurrentHitPoints()}));
       damageToBeDone -= actualDamageDone;
 
       if (currentDefender.isDead()) {
