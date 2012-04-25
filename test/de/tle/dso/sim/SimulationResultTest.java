@@ -1,15 +1,12 @@
 package de.tle.dso.sim;
 
-import de.tle.dso.units.Unit;
 import de.tle.dso.sim.battle.BattleResult;
-import de.tle.dso.units.player.Bogenschütze;
-import de.tle.dso.units.player.Reiterei;
-import de.tle.dso.units.player.Rekrut;
+import de.tle.dso.units.Unit;
 import de.tle.dso.units.util.UnitPatternHelper;
 import java.util.List;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 public class SimulationResultTest {
 

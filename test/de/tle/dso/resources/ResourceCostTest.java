@@ -1,9 +1,9 @@
 package de.tle.dso.resources;
 
+import static de.tle.dso.resources.Resource.*;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
-import static de.tle.dso.resources.Resource.*;
 
 public class ResourceCostTest {
 
