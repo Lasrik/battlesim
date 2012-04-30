@@ -3,9 +3,7 @@ package de.tle.dso.sim.battle;
 import de.tle.dso.resources.ResourceCost;
 import de.tle.dso.units.Army;
 import de.tle.dso.units.Unit;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class BattleResult {
 
@@ -69,13 +67,4 @@ public class BattleResult {
   public ResourceCost getResourceCosts() {
     return resourceCosts;
   }
-
-//  private void incCount(Unit deadUnit, Map<Class<? extends Unit>, Integer> map) {
-//    int currentCount = 1;
-//    if (map.containsKey(deadUnit.getClass())) {
-//      currentCount = map.get(deadUnit.getClass());
-//      currentCount++;
-//    }
-//    map.put(deadUnit.getClass(), currentCount);
-//  }
 }

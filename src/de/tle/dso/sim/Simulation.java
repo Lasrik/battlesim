@@ -50,14 +50,16 @@ public class Simulation {
   }
 
   private void logResults() {
-    LOG.debug(String.format("Done %s Runs", simResult.getNumberOfSimulationRuns()));
-    LOG.debug(String.format("Min Player losses: %s", UnitPatternHelper.createPatternFromArmy(simResult.getMinPlayerLosses())));
-    LOG.debug(String.format("Max Player losses: %s", UnitPatternHelper.createPatternFromArmy(simResult.getMaxPlayerLosses())));
-    LOG.debug(String.format("Min Computer losses: %s", UnitPatternHelper.createPatternFromArmy(simResult.getMinComputerLosses())));
-    LOG.debug(String.format("Max Computer losses: %s", UnitPatternHelper.createPatternFromArmy(simResult.getMaxComputerLosses())));
-    LOG.debug(String.format("Max resource cost: %s", simResult.getMaxResourceCosts()));
-    LOG.debug(String.format("Always win: %s", simResult.alwaysWin));
-    LOG.debug(String.format("Battles simulated per second: %.2f/s", simResult.getBattlesPerSecond()));
-    LOG.debug(String.format("Total time: %dms", (simResult.getSimDuration())));
+    if (LOG.isDebugEnabled()) {
+      LOG.debug(String.format("Done %s Runs", simResult.getNumberOfSimulationRuns()));
+      LOG.debug(String.format("Min Player losses: %s", UnitPatternHelper.createPatternFromArmy(simResult.getMinPlayerLosses())));
+      LOG.debug(String.format("Max Player losses: %s", UnitPatternHelper.createPatternFromArmy(simResult.getMaxPlayerLosses())));
+      LOG.debug(String.format("Min Computer losses: %s", UnitPatternHelper.createPatternFromArmy(simResult.getMinComputerLosses())));
+      LOG.debug(String.format("Max Computer losses: %s", UnitPatternHelper.createPatternFromArmy(simResult.getMaxComputerLosses())));
+      LOG.debug(String.format("Max resource cost: %s", simResult.getMaxResourceCosts()));
+      LOG.debug(String.format("Always win: %s", simResult.alwaysWin));
+      LOG.debug(String.format("Battles simulated per second: %.2f/s", simResult.getBattlesPerSecond()));
+      LOG.debug(String.format("Total time: %dms", (simResult.getSimDuration())));
+    }
   }
 }

@@ -49,7 +49,7 @@ public class BattleWave {
 
   private void doSingleDamage(int damageDone, Unit attacker) {
     currentDefender.reduceHitpoints(damageDone);
-    LOG.log(Level.TRACE, String.format("%s verursacht %s Schaden an %s (%s HP)", new Object[]{attacker.getName(), damageDone, currentDefender.getName(), currentDefender.getCurrentHitPoints()}));
+    LOG.log(Level.TRACE, attacker.getName() + " verursacht " + damageDone + " Schaden an " + currentDefender.getName() + " (" + currentDefender.getCurrentHitPoints() + " HP)");
 
     if (currentDefender.isDead()) {
       currentDefender = null;
@@ -60,7 +60,7 @@ public class BattleWave {
     int damageToBeDone = overallDamage;
     do {
       int actualDamageDone = currentDefender.reduceHitpoints(overallDamage);
-      LOG.log(Level.TRACE, String.format("%s verursacht %s Schaden an %s (%s HP)", new Object[]{attacker.getName(), actualDamageDone, currentDefender.getName(), currentDefender.isDead() ? "0" : currentDefender.getCurrentHitPoints()}));
+      LOG.trace(attacker.getName() + " verursacht " + actualDamageDone + " Schaden an " + currentDefender.getName() + "(" + (currentDefender.isDead() ? "0" : currentDefender.getCurrentHitPoints()) + " HP)");
       damageToBeDone -= actualDamageDone;
 
       if (currentDefender.isDead()) {

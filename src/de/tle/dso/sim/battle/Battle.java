@@ -34,10 +34,10 @@ public class Battle {
 
     int roundNumber = 0;
     while (!endBattle()) {
-      LOG.trace(String.format("Runde %s", ++roundNumber));
+      LOG.trace("Runde " + ++roundNumber);
 
       for (Initiative phase : Initiative.values()) {
-        LOG.trace(String.format("Phase %s", new Object[]{phase}));
+        LOG.trace("Phase " + phase);
 
         attackersWave(phase);
         defendersFightBack(phase);
@@ -100,15 +100,17 @@ public class Battle {
   }
 
   private void logArmies() {
-    LOG.trace(String.format("Angreifer: %s ---- Verteidiger: %s", new Object[]{attackingArmy.toString(), defendingArmy.toString()}));
+    LOG.trace("Angreifer: " + attackingArmy.toString() + " ---- Verteidiger: " + defendingArmy.toString());
   }
 
   private void logBattleOutcome() {
-    LOG.debug("+++++++++++++++++++++++++++++++++++++++++++++++++");
-    LOG.debug(String.format("Verluste Spieler: %s", UnitPatternHelper.createPatternFromArmy(battleResult.playerLosses)));
-    LOG.debug(String.format("Verluste Computer: %s", UnitPatternHelper.createPatternFromArmy(battleResult.computerLosses)));
-    LOG.debug(battleResult.battleWon ? "GEWONNEN" : "VERLOREN");
-    LOG.debug(String.format("Resourcen: %1s", battleResult.getResourceCosts()));
-    LOG.debug("+++++++++++++++++++++++++++++++++++++++++++++++++");
+    if (LOG.isDebugEnabled()) {
+      LOG.debug("+++++++++++++++++++++++++++++++++++++++++++++++++");
+      LOG.debug("Verluste Spieler: " + UnitPatternHelper.createPatternFromArmy(battleResult.playerLosses));
+      LOG.debug("Verluste Computer: " + UnitPatternHelper.createPatternFromArmy(battleResult.computerLosses));
+      LOG.debug(battleResult.battleWon ? "GEWONNEN" : "VERLOREN");
+      LOG.debug("Resourcen: " + battleResult.getResourceCosts());
+      LOG.debug("+++++++++++++++++++++++++++++++++++++++++++++++++");
+    }
   }
 }
