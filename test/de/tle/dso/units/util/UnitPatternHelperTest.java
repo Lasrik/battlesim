@@ -72,4 +72,13 @@ public class UnitPatternHelperTest {
     String pattern = UnitPatternHelper.createPatternFromArmy(army);
     assertEquals("", pattern);
   }
+  
+  @Test
+  public void testCase1() {
+    String testPattern = "1CK, 50WH, 49WL, 100RB";
+    
+    Army army = UnitPatternHelper.createArmyFromPattern(testPattern);
+    
+    assertEquals(200, army.size());
+  }
 }

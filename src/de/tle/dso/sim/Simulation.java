@@ -45,7 +45,7 @@ public class Simulation {
 
   public static void main(String[] args) throws InvalidArmyException {
     LOG.info("Starting Simulation ....");
-    Simulation sim = new Simulation("200 S, 1G", "160 RB, 10 WL, 30 WH");
+    Simulation sim = new Simulation("200 S, 1G", "50WH, 49WL, 100RB, 1CK");
     sim.simulate();
   }
 
