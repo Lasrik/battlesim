@@ -4,11 +4,13 @@ import de.tle.dso.sim.battle.Battle;
 import de.tle.dso.sim.battle.InvalidArmyException;
 import de.tle.dso.units.Army;
 import de.tle.dso.units.util.UnitPatternHelper;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-
 public class Simulation {
- public final static int MAX_RUNS = 100;
+
+  public final static int MAX_RUNS = 100;
   private String attackingArmyPattern;
   private String defendingArmyPattern;
   private int numberOfRounds;
@@ -38,14 +40,21 @@ public class Simulation {
     return simResult;
   }
 
+  public void setNumberOfRounds(int numberOfRounds) {
+    this.numberOfRounds = numberOfRounds;
+  }
+
   private Army createArmy(String pattern) {
     Army attackingArmy = UnitPatternHelper.createArmyFromPattern(pattern);
     return attackingArmy;
   }
 
   public static void main(String[] args) throws InvalidArmyException {
+    BasicConfigurator.configure();
+    // Logger.getRootLogger().setLevel(Level.TRACE);
     LOG.info("Starting Simulation ....");
-    Simulation sim = new Simulation("200 S, 1G", "50WH, 49WL, 100RB, 1CK");
+    Simulation sim = new Simulation("200R, 1G", "75WK, 50Kar");
+    sim.setNumberOfRounds(1500);
     sim.simulate();
   }
 

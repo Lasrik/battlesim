@@ -72,13 +72,33 @@ public class UnitPatternHelperTest {
     String pattern = UnitPatternHelper.createPatternFromArmy(army);
     assertEquals("", pattern);
   }
-  
+
   @Test
   public void testCase1() {
     String testPattern = "1CK, 50WH, 49WL, 100RB";
-    
+
     Army army = UnitPatternHelper.createArmyFromPattern(testPattern);
-    
+
     assertEquals(200, army.size());
+  }
+
+  @Test(expected=IllegalArgumentException.class)
+  public void testInvalidInput2() {
+    UnitPatternHelper.createArmyFromPattern("300 R");
+  }
+
+  @Test(expected=IllegalArgumentException.class)
+  public void testInvalidInput3() {
+    UnitPatternHelper.createArmyFromPattern("100 R 200C");
+  }
+
+  @Test(expected=IllegalArgumentException.class)
+  public void testInvalidInput4() {
+    UnitPatternHelper.createArmyFromPattern("10 R 100 XYZ");
+  }
+
+  @Test(expected=IllegalArgumentException.class)
+  public void testInvalidInput5() {
+    UnitPatternHelper.createArmyFromPattern("R 100, G 1");
   }
 }

@@ -11,7 +11,21 @@ import java.util.List;
 
 public class Army {
 
-  private List<Unit> units = new ArrayList<Unit>(201);
+  public static int MAX_SIZE = 200;
+  public static int VETERAN_MAX_SIZE = 250;
+
+  private List<Unit> units;
+  private int maxSize;
+
+
+  public Army() {
+    this(MAX_SIZE);
+  }
+
+  public Army(int maxSize) {
+    this.maxSize = maxSize;
+    units = new ArrayList<Unit>(this.maxSize);
+  }
 
   public void addGeneral() {
     units.add(new General());
@@ -31,8 +45,12 @@ public class Army {
     return false;
   }
 
+  public int getMaxUnits() {
+    return containsGeneral() ? maxSize + 1 : maxSize;
+  }
+
   public boolean isValid() {
-    return units.size() > 0 && (containsGeneral() ? units.size() <= 201 : units.size() <= 200);
+    return units.size() > 0 && units.size() <= getMaxUnits();
   }
 
   public int size() {
@@ -52,8 +70,8 @@ public class Army {
   }
 
   public List<Unit> removeDeadUnits() {
-    List<Unit> deadUnits = new ArrayList<Unit>(201);
-    List<Unit> aliveUnits = new ArrayList<Unit>(201);
+    List<Unit> deadUnits = new ArrayList<Unit>(this.maxSize);
+    List<Unit> aliveUnits = new ArrayList<Unit>(this.maxSize);
 
     for (Unit unit : units) {
       if (unit.isDead()) {

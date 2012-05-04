@@ -49,7 +49,7 @@ public class ArmyTest {
   @Test
   public void testIsValid2() {
     assertTrue(army.isValid());
-    for (int i = 0; i < 200 - numberOfGeneratedUnits; i++) {
+    for (int i = 0; i < army.getMaxUnits() - numberOfGeneratedUnits; i++) {
       army.add(new Rekrut());
     }
     assertTrue(army.isValid());
@@ -60,12 +60,26 @@ public class ArmyTest {
   @Test
   public void testIsValid() {
     assertTrue(army.isValid());
-    for (int i = 0; i < 200 - numberOfGeneratedUnits; i++) {
+    for (int i = 0; i < army.getMaxUnits() - numberOfGeneratedUnits; i++) {
       army.add(new Rekrut());
     }
     assertTrue(army.isValid());
     army.addGeneral();
     assertTrue(army.isValid());
+  }
+
+  @Test
+  public void testIsValid3() {
+    army = new Army(Army.VETERAN_MAX_SIZE);
+
+    for (int i = 0; i < army.getMaxUnits(); i++) {
+      army.add(new Rekrut());
+    }
+    assertTrue(army.isValid());
+    army.addGeneral();
+    assertTrue(army.isValid());
+    army.add(new Rekrut());
+    assertFalse(army.isValid());
   }
 
   @Test

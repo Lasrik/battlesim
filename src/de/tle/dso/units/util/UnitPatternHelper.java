@@ -1,5 +1,6 @@
 package de.tle.dso.units.util;
 
+import de.tle.dso.sim.battle.InvalidArmyException;
 import de.tle.dso.units.Army;
 import de.tle.dso.units.Unit;
 import de.tle.dso.units.sort.SortByPrioComparator;
@@ -12,6 +13,10 @@ import org.reflections.Reflections;
 
 public class UnitPatternHelper {
 
+  /*
+   * Dieser Block dient nur dazu, alle verfügbaren Units (also alle Klasse, die
+   * von Unit erben) zu finden
+   */
   public final static Map<String, Class<? extends Unit>> unitsByShortName = new HashMap<String, Class<? extends Unit>>();
   private final static Reflections reflections = new Reflections("de.tle.dso");
 
@@ -31,12 +36,13 @@ public class UnitPatternHelper {
   }
 
   /*
-   * Armeen sind immer nach dem Muster <Anzahl> <Kürzel>, <Anzahl> <Kürzel>
-   * aufgebaut. Also z.b. 32 R, 15C für 32 Rekruten und 15 Reiterei
+   * Armeen sind immer nach dem Muster <Anzahl> <Kürzel> <Anzahl> <Kürzel> mit
+   * oder ohne Komma aufgebaut. Also z.b. 32 R, 15C für 32 Rekruten und 15
+   * Reiterei
    */
-  private final Pattern syntaxPattern = Pattern.compile("\\s*(\\d+)\\s*([A-Z]+)");
-  private String originalInputString;
-  private String[] splitPatterns;
+  private final Pattern syntaxPattern = Pattern.compile("\\s*?(\\d+)\\s*?([A-Z]+)\\s*?,?\\s*?");
+  private final String originalInputString;
+  private final Matcher matcher;
 
   public static Army createArmyFromPattern(String inputString) {
     UnitPatternHelper helper = new UnitPatternHelper(inputString);
@@ -78,24 +84,33 @@ public class UnitPatternHelper {
 
   private UnitPatternHelper(String pattern) {
     this.originalInputString = pattern.toUpperCase();
-    splitPattern();
+    matcher = syntaxPattern.matcher(originalInputString);
+    if (!matcher.lookingAt()) {
+      throw new IllegalArgumentException("Konnte Armee Pattern nicht matchen: " + originalInputString);
+    }
+    matcher.reset();
   }
 
   public Army createArmy() {
     Army result = new Army();
+    while (matcher.find()) {
+      String countString = matcher.group(1);
+      String unitString = matcher.group(2);
 
-    for (String singlePattern : splitPatterns) {
-      MatchingResult matchingResult = match(singlePattern);
-      fillInUnitsForPattern(matchingResult, result);
+      fillInUnits(countString, unitString, result);
     }
 
+    validate(result);
     return result;
   }
 
-  private void fillInUnitsForPattern(MatchingResult matchingResult, Army result) throws IllegalArgumentException {
-    for (int i = 0; i < matchingResult.count; i++) {
+  private void fillInUnits(String countString, String unitString, Army result) throws IllegalArgumentException {
+    int count = toInt(countString);
+
+    Class<? extends Unit> unitClass = unitsByShortName.get(unitString);
+    for (int i = 0; i < count; i++) {
       try {
-        Unit unit = matchingResult.unitClass.newInstance();
+        Unit unit = unitClass.newInstance();
         result.add(unit);
       } catch (Exception ex) {
         throw new IllegalArgumentException("Error while creating army from pattern: " + originalInputString + ". " + ex.toString());
@@ -103,52 +118,12 @@ public class UnitPatternHelper {
     }
   }
 
-  private void splitPattern() throws IllegalArgumentException {
-    this.splitPatterns = originalInputString.split(",");
-    if (splitPatterns.length == 0) {
-      throw new IllegalArgumentException("Invalid pattern: " + originalInputString);
-    }
-  }
-
-  private MatchingResult match(String troopPattern) {
-    MatchingResult result = new MatchingResult();
-    Matcher matcher = syntaxPattern.matcher(troopPattern);
-    if (matcher.lookingAt()) {
-      String countString = matcher.group(1);
-      String unitString = matcher.group(2);
-
-      result.count = Integer.parseInt(countString);
-      if (result.count < 1 || result.count > 200) {
-        throw new IllegalArgumentException("Count must be between 1 and 200: " + troopPattern);
-      }
-
-      result.unitClass = unitsByShortName.get(unitString);
-      if (result.unitClass == null) {
-        throw new IllegalArgumentException("No matching unit class found: " + unitString);
-      }
-    } else {
-      throw new IllegalArgumentException("Illegal pattern: " + originalInputString);
-    }
-
-    return result;
-  }
-
-  private static Unit instantiate(Class<? extends Unit> unitClazz) {
+  private int toInt(String countString) {
     try {
-      return unitClazz.newInstance();
+      return Integer.parseInt(countString);
     } catch (Exception ex) {
-      return null;
+      throw new IllegalArgumentException("Konnte Unit Anzahl nicht parsen: " + countString);
     }
-  }
-
-  private static List<Unit> makeSortedListOfUnits(Map<Class<? extends Unit>, Integer> map) {
-    List<Unit> result = new LinkedList<Unit>();
-    for (Class<? extends Unit> unitClass : map.keySet()) {
-      Unit unit = instantiate(unitClass);
-      result.add(unit);
-    }
-    Collections.sort(result, new SortByPrioComparator());
-    return result;
   }
 
   private static void removeLastComma(StringBuilder result) {
@@ -157,9 +132,9 @@ public class UnitPatternHelper {
     }
   }
 
-  private static class MatchingResult {
-
-    public int count;
-    public Class<? extends Unit> unitClass;
+  private void validate(Army result) {
+    if (!result.isValid()) {
+      throw new IllegalArgumentException("Pattern gab ungültige Armee: " + originalInputString);
+    }
   }
 }
