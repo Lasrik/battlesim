@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 
 
 public class Simulation {
- public final static int MAX_RUNS = 50;
+ public final static int MAX_RUNS = 100;
   private String attackingArmyPattern;
   private String defendingArmyPattern;
   private int numberOfRounds;
