@@ -9,6 +9,8 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 public class Simulation {
+  public static final String ATTACKING_ARMY_PATTERN = "41M, 96C, 41A, 1G";
+  public static final String DEFENDING_ARMY_PATTERN = "75WK, 50Kar";
 
   public final static int MAX_RUNS = 100;
   private String attackingArmyPattern;
@@ -53,7 +55,7 @@ public class Simulation {
     BasicConfigurator.configure();
     // Logger.getRootLogger().setLevel(Level.TRACE);
     LOG.info("Starting Simulation ....");
-    Simulation sim = new Simulation("200R, 1G", "75WK, 50Kar");
+    Simulation sim = new Simulation(ATTACKING_ARMY_PATTERN, DEFENDING_ARMY_PATTERN);
     sim.setNumberOfRounds(1500);
     sim.simulate();
   }
