@@ -92,7 +92,7 @@ public class UnitPatternHelper {
   }
 
   public Army createArmy() {
-    Army result = new Army();
+    Army result = new Army(Army.VETERAN_MAX_SIZE);
     while (matcher.find()) {
       String countString = matcher.group(1);
       String unitString = matcher.group(2);
