@@ -1,5 +1,7 @@
 package de.tle.dso.resources;
 
+import de.tle.dso.units.Army;
+import de.tle.dso.units.Unit;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Formatter;
@@ -29,6 +31,14 @@ public class ResourceCost implements Comparable<ResourceCost> {
     return new ResourceCost(new EnumMap<Resource, Integer>(Resource.class));
   }
 
+  public static ResourceCost fromArmy(Army army) {
+    ResourceCost result = buildEmpty();
+    for (Unit unit : army.getUnits()) {
+      result.add(unit.getResourceCost());
+    }
+    return result;
+  }
+
   public int totalWeightPoints() {
     int result = 0;
 
@@ -43,7 +53,7 @@ public class ResourceCost implements Comparable<ResourceCost> {
     if (this == NONE) {
       throw new UnsupportedOperationException("Cannot add resources to NONE.");
     }
-    
+
     for (Resource res : anotherCost.resources.keySet()) {
       int count = anotherCost.resources.get(res);
       if (this.resources.containsKey(res)) {

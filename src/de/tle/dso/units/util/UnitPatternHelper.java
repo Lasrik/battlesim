@@ -45,8 +45,12 @@ public class UnitPatternHelper {
   private final Matcher matcher;
 
   public static Army createArmyFromPattern(String inputString) {
+    return createArmyFromPattern(inputString, false);
+  }
+
+  public static Army createArmyFromPattern(String inputString, boolean useLargeArmy) {
     UnitPatternHelper helper = new UnitPatternHelper(inputString);
-    return helper.createArmy();
+    return helper.createArmy(true);
   }
 
   public static String createPatternFromArmy(Army army) {
@@ -91,8 +95,9 @@ public class UnitPatternHelper {
     matcher.reset();
   }
 
-  public Army createArmy() {
-    Army result = new Army();
+  public Army createArmy(boolean useLargeArmy) {
+    int size = useLargeArmy ? Army.VETERAN_MAX_SIZE : Army.MAX_SIZE;
+    Army result = new Army(size);
     while (matcher.find()) {
       String countString = matcher.group(1);
       String unitString = matcher.group(2);
