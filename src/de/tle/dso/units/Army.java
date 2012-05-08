@@ -50,7 +50,7 @@ public class Army {
   }
 
   public boolean isValid() {
-    return units.size() > 0 && units.size() <= getMaxUnits();
+    return units.size() >= getMinUnits() && units.size() <= getMaxUnits();
   }
 
   public int size() {
@@ -106,5 +106,9 @@ public class Army {
     List<Unit> sortedList = new ArrayList<Unit>(units);
     Collections.sort(sortedList, comparator);
     return sortedList;
+  }
+
+  private int getMinUnits() {
+    return containsGeneral() ? 2 : 1;
   }
 }
