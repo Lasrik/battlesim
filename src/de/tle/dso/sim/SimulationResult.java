@@ -3,6 +3,9 @@ package de.tle.dso.sim;
 import de.tle.dso.resources.ResourceCost;
 import de.tle.dso.sim.battle.BattleResult;
 import de.tle.dso.units.Army;
+import de.tle.dso.units.Unit;
+import de.tle.dso.units.util.UnitPatternHelper;
+import java.util.Map;
 
 public class SimulationResult {
 
@@ -11,9 +14,11 @@ public class SimulationResult {
   protected Army minComputerLosses = null;
   protected Army maxComputerLosses = null;
   protected ResourceCost maxResourceCosts = ResourceCost.buildEmpty();
+  protected Army lossesThatCausedMaxResourceCosts = new Army();
   protected int numberOfSimulationRuns = 0;
   protected long simDuration = 0;
   protected boolean alwaysWin = true;
+  protected ResourceCost totalResources = ResourceCost.buildEmpty();
 
   public SimulationResult() {
   }
@@ -66,6 +71,18 @@ public class SimulationResult {
     return maxResourceCosts;
   }
 
+  public int getMaxResourceCostWeightPoints() {
+    return maxResourceCosts.totalWeightPoints();
+  }
+
+  public int getAvgResourceCostWeightPoints() {
+    return totalResources.totalWeightPoints() / numberOfSimulationRuns;
+  }
+
+  public Army getArmyForMaxResourceCost() {
+    return lossesThatCausedMaxResourceCosts;
+  }
+
   public boolean isAlwaysWin() {
     return alwaysWin;
   }
@@ -73,7 +90,10 @@ public class SimulationResult {
   private void trackResourceCosts(BattleResult battleResult) {
     if (maxResourceCosts.lesserThan(battleResult.getResourceCosts())) {
       maxResourceCosts = battleResult.getResourceCosts();
+      lossesThatCausedMaxResourceCosts = battleResult.getPlayerLosses();
     }
+
+    totalResources.add(battleResult.getResourceCosts());
   }
 
   private void trackComputerLosses(BattleResult battleResult) {
@@ -101,5 +121,10 @@ public class SimulationResult {
 
   private boolean notSet(Object o) {
     return o == null;
+  }
+
+  @Override
+  public String toString() {
+    return maxPlayerLosses.toString();
   }
 }

@@ -6,6 +6,7 @@ import de.tle.dso.units.Unit;
 import de.tle.dso.units.sort.SortByPrioComparator;
 import java.lang.reflect.Modifier;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
