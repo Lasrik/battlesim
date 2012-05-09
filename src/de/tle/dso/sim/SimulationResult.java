@@ -125,6 +125,6 @@ public class SimulationResult {
 
   @Override
   public String toString() {
-    return maxPlayerLosses.toString();
+    return maxPlayerLosses.toString() + ", " + getAvgResourceCostWeightPoints() + "avg";
   }
 }
